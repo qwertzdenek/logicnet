@@ -1,11 +1,18 @@
 package pia;
 
+import pia.dao.GenericDao;
+import pia.dao.jpa.AccountDaoJpa;
+import pia.data.Account;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.IOException;
+import java.sql.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  * Date: 7.11.14
@@ -13,11 +20,28 @@ import java.io.*;
  * @author Zdeněk Janeček
  */
 public class IndexServlet extends HttpServlet {
+    GenericDao<Account, Long> ad;
+
+    public IndexServlet() {
+        this.ad = new AccountDaoJpa();
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ServletContext context = getServletContext();
 
+        Account newAccount = new Account();
+        newAccount.setPassword("testik");
+        newAccount.setNickname("test");
+        newAccount.setProfilePicture("img.png");
+        newAccount.setBirthday(new Date(System.currentTimeMillis()));
+        ad.getTransaction().begin();
+        ad.save(newAccount);
+        ad.getTransaction().commit();
+
+        resp.getWriter().print(newAccount.toString());
+
+        /*
         File image = null;
         FileInputStream in = null;
 
@@ -46,5 +70,6 @@ public class IndexServlet extends HttpServlet {
         in.close();
         out.flush();
         out.close();
+        */
     }
 }
