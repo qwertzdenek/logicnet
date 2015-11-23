@@ -27,6 +27,6 @@ public class WelcomeServlet extends HttpServlet {
         req.setAttribute("content", "welcome.jsp");
         req.setAttribute("title", "LogicNet welcome screen");
 
-        req.getRequestDispatcher("view.jsp").forward(req, resp);
+        req.getRequestDispatcher("/view.jsp").forward(req, resp);
     }
 }
