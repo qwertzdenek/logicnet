@@ -83,17 +83,19 @@
                 <artifactId>jetty-maven-plugin</artifactId>
                 <configuration>
                     <scanIntervalSeconds>10</scanIntervalSeconds>
-                    <webAppConfig>
-                        <contextPath>/</contextPath>
-                    </webAppConfig>
+                    <jettyXml>${basedir}/src/main/config/etc/jetty.xml</jettyXml>
                     <stopPort>9966</stopPort>
                     <stopKey>foo</stopKey>
-                    <loginServices>
-                        <loginService implementation="org.eclipse.jetty.jaas.JAASLoginService">
-                            <name>Test Realm</name>
-                            <loginModuleName>login_realm</loginModuleName>
-                        </loginService>
-                    </loginServices>
+                    <systemProperties>
+                        <systemProperty>
+                            <name>jetty.home</name>
+                            <value>${basedir}/src/main/config</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <name>java.security.auth.login.config</name>
+                            <value>${basedir}/src/main/config/etc/login.conf</value>
+                        </systemProperty>
+                    </systemProperties>
                 </configuration>
             </plugin>
             <plugin>

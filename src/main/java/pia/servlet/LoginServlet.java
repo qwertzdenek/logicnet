@@ -27,6 +27,6 @@ public class LoginServlet extends HttpServlet {
         req.setAttribute("content", "login.jsp");
         req.setAttribute("title", "LogicNet login screen");
 
-        req.getRequestDispatcher("/login.jsp").forward(req, resp);
+        req.getRequestDispatcher("WEB-INF/html/view.jsp").forward(req, resp);
     }
 }
