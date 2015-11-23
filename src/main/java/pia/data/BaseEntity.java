@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @author Zdenek Janecek
  */
 @MappedSuperclass
-public abstract class BaseEntity<PK extends Serializable> implements IEntity<PK> {
+public abstract class BaseEntity<PK extends Serializable> implements Serializable, IEntity<PK> {
     protected PK id;
 
     @Id
