@@ -2,6 +2,8 @@ package pia.data;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "accounts")
@@ -11,10 +13,20 @@ public class Account extends BaseEntity<Long> {
     private Date birthday;
     private String profilePicture;
 
-    @Column(nullable = false)
-    public String getNickname() { return nickname; }
+    private Set<Role> roles;
 
-    public void setNickname(String nickname) { this.nickname = nickname; }
+    public Account() {
+        this.roles = new LinkedHashSet<>();
+    }
+
+    @Column(nullable = false)
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
 
     @Column(nullable = false)
     public String getPassword() {
@@ -25,14 +37,33 @@ public class Account extends BaseEntity<Long> {
         this.password = password;
     }
 
-    public Date getBirthday() { return birthday; }
+    public Date getBirthday() {
+        return birthday;
+    }
 
-    public void setBirthday(Date birthday) { this.birthday = birthday; }
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
 
     @Column(nullable = false)
-    public String getProfilePicture() { return profilePicture; }
+    public String getProfilePicture() {
+        return profilePicture;
+    }
 
-    public void setProfilePicture(String profilePicture) { this.profilePicture = profilePicture; }
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
+    @ManyToMany
+    @JoinTable(name = "account_roles", joinColumns = @JoinColumn(name = "accounts", referencedColumnName = "nickname"),
+            inverseJoinColumns = @JoinColumn(name = "role", referencedColumnName = "id"))
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
 
     @Override
     public String toString() {

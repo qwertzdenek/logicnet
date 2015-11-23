@@ -15,7 +15,7 @@ public class Document {
         this.words = words;
         rnd = new Random();
         rnd.setSeed(words.hashCode());
-        
+
         wordTopics = new int[words.size()];
         topicCounts = new int[MyTopicModel.K];
         wordIDs = new int[words.size()];
@@ -29,17 +29,18 @@ public class Document {
         wordTopics[word] = topic;
         topicCounts[topic]++;
     }
-    
+
     public int assignRandomTopic(int word) {
         int topic = Math.abs(rnd.nextInt()) % MyTopicModel.K;
         wordTopics[word] = topic;
         topicCounts[topic]++;
-        
+
         return topic;
     }
 
     public String getWordByPos(int pos) {
-        if (pos < 0 || pos >= words.size()) throw new IllegalArgumentException("pos key ("+pos+") must range between 0 and "+(words.size()-1));
+        if (pos < 0 || pos >= words.size())
+            throw new IllegalArgumentException("pos key (" + pos + ") must range between 0 and " + (words.size() - 1));
         return words.get(pos);
     }
 }

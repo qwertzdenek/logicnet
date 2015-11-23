@@ -3,12 +3,12 @@
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
              version="2.1">
 
-    <persistence-unit name="kiv.janecekz"  transaction-type="RESOURCE_LOCAL">
+    <persistence-unit name="kiv.janecekz" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
         <properties>
             <!-- JDBC Connection configuration -->
-            <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+            <property name="javax.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver"/>
             <property name="javax.persistence.jdbc.password" value="sp"/>
             <property name="javax.persistence.jdbc.user" value="pia"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost/pia"/>
@@ -16,7 +16,7 @@
             <!-- Hibernate-specific configuration -->
             <property name="hibernate.hbm2ddl.auto" value="create"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
-            <property name="hibernate.validator.apply_to_ddl" value="true" />
+            <property name="hibernate.validator.apply_to_ddl" value="true"/>
 
             <!-- Hibernate-C3P0 configuration -->
             <property name="connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider"/>

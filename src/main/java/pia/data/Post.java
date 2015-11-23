@@ -10,11 +10,6 @@ public class Post extends BaseEntity<Long> {
     private String content;
     private Date date;
 
-    public Post(String content, Date date) {
-        this.content = content;
-        this.date = date;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -4,17 +4,8 @@ import icp.tools.BasicDataProvider;
 import icp.tools.DataProvider;
 import icp.tools.Vocabulary;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Random;
+import java.io.*;
+import java.util.*;
 
 public class MyTopicModel implements TopicModel {
     public static int K = 50;
@@ -218,7 +209,7 @@ public class MyTopicModel implements TopicModel {
             List<String>[] results = getTopicWords(5);
             int k = 0;
             for (List<String> list : results) {
-                System.out.print((k+1) + ":");
+                System.out.print((k + 1) + ":");
                 for (String string : list) {
                     System.out.print(" " + string);
                 }
@@ -241,7 +232,7 @@ public class MyTopicModel implements TopicModel {
             sum += topicProb(k, doc);
         }
         System.out.println("sum_z P(z|d = 0) = " + sum);
-        
+
         sum = 0;
         for (int i = 0; i < voc.size(); i++) {
             sum += wordProb(i, doc);

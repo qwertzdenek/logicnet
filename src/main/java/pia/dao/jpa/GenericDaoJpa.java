@@ -39,7 +39,7 @@ public class GenericDaoJpa<E extends IEntity<PK>, PK extends Serializable> imple
 
     public void delete(PK id) {
         E en = em.find(persistedClass, id);
-        if(en != null) {
+        if (en != null) {
             em.remove(en);
         }
     }

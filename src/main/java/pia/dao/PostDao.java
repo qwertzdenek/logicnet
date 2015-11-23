@@ -4,7 +4,7 @@ import pia.data.Post;
 
 /**
  * DAO interface for the User entity
- *
+ * <p>
  * Date: 26.9.15
  *
  * @author Jakub Danek

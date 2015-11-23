@@ -1,23 +1,17 @@
 package pia.data;
 
+import javax.persistence.*;
 import java.io.Serializable;
-
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Transient;
 
 /**
  * Base interface for all entities to make implementation of generic dao easier.
- *
+ * <p>
  * PK type represents type of the entity's primary key.
  *
  * @author Zdenek Janecek
  */
 @MappedSuperclass
-public abstract class BaseEntity<PK extends Serializable> implements  IEntity<PK> {
-
+public abstract class BaseEntity<PK extends Serializable> implements IEntity<PK> {
     protected PK id;
 
     @Id

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * Base interface for all entities to make implementation of generic dao easier.
- *
+ * <p>
  * PK type represents type of the entity's primary key.
  *
  * @author Zdenek Janecek
@@ -12,8 +12,7 @@ import java.io.Serializable;
 public interface IEntity<PK extends Serializable> {
 
     /**
-     *
-     * @return  primary key of the instance
+     * @return primary key of the instance
      */
     PK getPK();
 }

@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 /**
  * Base interface for DAOs, providing CRUD operations.
- *
+ * <p>
  * Date: 26.9.15
  *
  * @author Jakub Danek
@@ -16,6 +16,7 @@ public interface GenericDao<E extends IEntity<PK>, PK extends Serializable> {
 
     /**
      * get db transaction
+     *
      * @return Entity transaction
      */
     public EntityTransaction getTransaction();
@@ -29,7 +30,6 @@ public interface GenericDao<E extends IEntity<PK>, PK extends Serializable> {
     E save(E instance);
 
     /**
-     *
      * @param id
      * @return instance with the given id or null if not found
      */
