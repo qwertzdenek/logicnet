@@ -13,67 +13,36 @@
 
     <name>PIA Jetty</name>
 
-    <properties>
-        <jetty.version>9.3.6.v20151106</jetty.version>
-    </properties>
-
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.eclipse.jetty</groupId>
-                    <artifactId>jetty-maven-plugin</artifactId>
-                    <configuration>
-                        <scanIntervalSeconds>10</scanIntervalSeconds>
-                        <jettyXml>${basedir}/config/jetty.xml</jettyXml>
-                        <stopPort>9966</stopPort>
-                        <stopKey>foo</stopKey>
-                        <systemProperties>
-                            <systemProperty>
-                                <name>jetty.home</name>
-                                <value>${basedir}/config</value>
-                            </systemProperty>
-                        </systemProperties>
-                        <webAppConfig>
-                            <contextPath>/</contextPath>
-                            <extraClasspath>target/classes;../db/target/classes</extraClasspath>
-                        </webAppConfig>
-                        <scanTargets>
-                            <scanTarget>../db/target/classes</scanTarget>
-                        </scanTargets>
-                    </configuration>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <configuration>
-                        <testFailureIgnore>true</testFailureIgnore>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>${jetty.version}</version>
+                <configuration>
+                    <war>/home/haswi/git/logicnet/app/target/pia-app.war</war>
+                    <jettyXml>${basedir}/config/jetty.xml</jettyXml>
+                    <stopPort>9966</stopPort>
+                    <stopKey>foo</stopKey>
+                    <daemon>false</daemon>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>start-jetty</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>deploy-war</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>stop-jetty</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.sonatype.mavenbook.multi</groupId>
-            <artifactId>pia-db</artifactId>
-            <version>1.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-security</artifactId>
-            <version>${jetty.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-jaas</artifactId>
-            <version>${jetty.version}</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
 </project>

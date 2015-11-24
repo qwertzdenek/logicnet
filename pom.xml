@@ -10,6 +10,10 @@
     <version>1.0</version>
     <name>PIA Parent Project</name>
 
+    <properties>
+        <jetty.version>9.3.6.v20151106</jetty.version>
+    </properties>
+
     <modules>
         <module>app</module>
         <module>db</module>
@@ -17,7 +21,6 @@
     </modules>
 
     <build>
-        <finalName>pia</finalName>
         <pluginManagement>
             <plugins>
                 <plugin>
