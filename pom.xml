@@ -4,10 +4,10 @@
                              http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.sonatype.mavenbook.multi</groupId>
+    <groupId>pia.multi</groupId>
     <artifactId>pia-parent</artifactId>
-    <packaging>pom</packaging>
     <version>1.0</version>
+    <packaging>pom</packaging>
     <name>PIA Parent Project</name>
 
     <properties>
@@ -16,8 +16,8 @@
 
     <modules>
         <module>app</module>
-        <module>db</module>
         <module>jetty</module>
+        <module>lm</module>
     </modules>
 
     <build>
