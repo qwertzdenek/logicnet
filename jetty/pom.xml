@@ -1,0 +1,79 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.sonatype.mavenbook.multi</groupId>
+        <artifactId>pia-parent</artifactId>
+        <version>1.0</version>
+    </parent>
+    <artifactId>pia-jetty</artifactId>
+    <packaging>jar</packaging>
+
+    <name>PIA Jetty</name>
+
+    <properties>
+        <jetty.version>9.3.6.v20151106</jetty.version>
+    </properties>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-maven-plugin</artifactId>
+                    <configuration>
+                        <scanIntervalSeconds>10</scanIntervalSeconds>
+                        <jettyXml>${basedir}/src/main/config/etc/jetty.xml</jettyXml>
+                        <stopPort>9966</stopPort>
+                        <stopKey>foo</stopKey>
+                        <systemProperties>
+                            <systemProperty>
+                                <name>jetty.home</name>
+                                <value>${basedir}/src/main/config</value>
+                            </systemProperty>
+                        </systemProperties>
+                        <webAppConfig>
+                            <contextPath>/my-context</contextPath>
+                            <extraClasspath>target/classes;../db/target/classes</extraClasspath>
+                        </webAppConfig>
+                        <scanTargets>
+                            <scanTarget>../db/target/classes</scanTarget>
+                        </scanTargets>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <configuration>
+                        <testFailureIgnore>true</testFailureIgnore>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.sonatype.mavenbook.multi</groupId>
+            <artifactId>pia-db</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-security</artifactId>
+            <version>${jetty.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-jaas</artifactId>
+            <version>${jetty.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+</project>

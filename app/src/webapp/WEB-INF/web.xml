@@ -6,7 +6,7 @@
     <!-- Initialize database connection -->
     <listener>
         <listener-class>
-            pia.util.DBManager
+            DBManager
         </listener-class>
     </listener>
     <listener>

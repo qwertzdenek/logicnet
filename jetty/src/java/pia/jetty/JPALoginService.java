@@ -1,4 +1,4 @@
-package pia.util;
+package pia.jetty;
 
 import org.eclipse.jetty.jaas.spi.AbstractLoginModule;
 import org.eclipse.jetty.jaas.spi.UserInfo;

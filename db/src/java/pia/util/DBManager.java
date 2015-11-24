@@ -6,15 +6,11 @@ import pia.data.Role;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
 import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-@WebListener
-public class DBManager implements ServletContextListener {
+public class DBManager {
     private static final String PERSISTENCE_UNIT = "kiv.janecekz";
 
     private static EntityManagerFactory emf;
@@ -38,18 +34,9 @@ public class DBManager implements ServletContextListener {
         em.getTransaction().commit();
     }
 
-    public void contextInitialized(ServletContextEvent event) {
-        emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT);
-        persistSeed();
-    }
-
-    public void contextDestroyed(ServletContextEvent event) {
-        emf.close();
-    }
-
     public static EntityManager createEntityManager() {
         if (emf == null) {
-            throw new IllegalStateException("Context is not initialized yet.");
+            emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT);
         }
         return emf.createEntityManager();
     }

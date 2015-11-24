@@ -1,111 +1,43 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>kiv.pia</groupId>
-    <artifactId>logicnet</artifactId>
-    <packaging>war</packaging>
-    <version>1.0-SNAPSHOT</version>
-    <name>PIA webapp</name>
+    <groupId>org.sonatype.mavenbook.multi</groupId>
+    <artifactId>pia-parent</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0</version>
+    <name>PIA Parent Project</name>
 
-    <properties>
-        <hibernate.version>5.0.4.Final</hibernate.version>
-        <jetty.version>9.3.6.v20151106</jetty.version>
-        <javax.servlet.version>3.1.0</javax.servlet.version>
-        <javax.servlet.jsp.jstl.version>1.2-rev-1</javax.servlet.jsp.jstl.version>
-    </properties>
-
-    <dependencies>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>${javax.servlet.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.servlet.jsp.jstl</groupId>
-            <artifactId>jstl-api</artifactId>
-            <version>${javax.servlet.jsp.jstl.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>commons-dbutils</groupId>
-            <artifactId>commons-dbutils</artifactId>
-            <version>1.6</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.1-api</artifactId>
-            <version>1.0.0.Final</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>${hibernate.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-c3p0</artifactId>
-            <version>${hibernate.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.mariadb.jdbc</groupId>
-            <artifactId>mariadb-java-client</artifactId>
-            <version>1.3.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-security</artifactId>
-            <version>${jetty.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-jaas</artifactId>
-            <version>${jetty.version}</version>
-        </dependency>
-
-    </dependencies>
+    <modules>
+        <module>app</module>
+        <module>db</module>
+        <module>jetty</module>
+    </modules>
 
     <build>
         <finalName>pia</finalName>
-        <plugins>
-            <plugin>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <configuration>
-                    <scanIntervalSeconds>10</scanIntervalSeconds>
-                    <jettyXml>${basedir}/src/main/config/etc/jetty.xml</jettyXml>
-                    <stopPort>9966</stopPort>
-                    <stopKey>foo</stopKey>
-                    <systemProperties>
-                        <systemProperty>
-                            <name>jetty.home</name>
-                            <value>${basedir}/src/main/config</value>
-                        </systemProperty>
-                        <systemProperty>
-                            <name>java.security.auth.login.config</name>
-                            <value>${basedir}/src/main/config/etc/login.conf</value>
-                        </systemProperty>
-                    </systemProperties>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>
