@@ -25,17 +25,17 @@
                     <artifactId>jetty-maven-plugin</artifactId>
                     <configuration>
                         <scanIntervalSeconds>10</scanIntervalSeconds>
-                        <jettyXml>${basedir}/src/main/config/etc/jetty.xml</jettyXml>
+                        <jettyXml>${basedir}/config/jetty.xml</jettyXml>
                         <stopPort>9966</stopPort>
                         <stopKey>foo</stopKey>
                         <systemProperties>
                             <systemProperty>
                                 <name>jetty.home</name>
-                                <value>${basedir}/src/main/config</value>
+                                <value>${basedir}/config</value>
                             </systemProperty>
                         </systemProperties>
                         <webAppConfig>
-                            <contextPath>/my-context</contextPath>
+                            <contextPath>/</contextPath>
                             <extraClasspath>target/classes;../db/target/classes</extraClasspath>
                         </webAppConfig>
                         <scanTargets>
