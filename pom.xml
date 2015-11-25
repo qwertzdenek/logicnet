@@ -18,6 +18,7 @@
         <module>app</module>
         <module>db</module>
         <module>jetty</module>
+        <module>test_login_module</module>
     </modules>
 
     <build>

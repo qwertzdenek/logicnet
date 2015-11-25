@@ -9,7 +9,7 @@
         <version>1.0</version>
     </parent>
     <artifactId>pia-jetty</artifactId>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <name>PIA Jetty</name>
 
@@ -20,12 +20,19 @@
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>${jetty.version}</version>
                 <configuration>
-                    <war>/home/haswi/git/logicnet/app/target/pia-app.war</war>
+                    <war>../app/target/pia-app.war</war>
                     <jettyXml>${basedir}/config/jetty.xml</jettyXml>
                     <stopPort>9966</stopPort>
                     <stopKey>foo</stopKey>
                     <daemon>false</daemon>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.sonatype.mavenbook.multi</groupId>
+                        <artifactId>pia-jaas-test</artifactId>
+                        <version>1.0</version>
+                    </dependency>
+                </dependencies>
                 <executions>
                     <execution>
                         <id>start-jetty</id>
