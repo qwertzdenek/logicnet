@@ -29,10 +29,11 @@
                 <dependencies>
                     <dependency>
                         <groupId>org.sonatype.mavenbook.multi</groupId>
-                        <artifactId>pia-jaas-test</artifactId>
+                        <artifactId>pia-jaas</artifactId>
                         <version>1.0</version>
                     </dependency>
                 </dependencies>
+                <!--
                 <executions>
                     <execution>
                         <id>start-jetty</id>
@@ -49,6 +50,7 @@
                         </goals>
                     </execution>
                 </executions>
+                -->
             </plugin>
         </plugins>
     </build>

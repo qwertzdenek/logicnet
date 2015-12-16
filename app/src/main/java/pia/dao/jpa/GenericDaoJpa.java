@@ -2,11 +2,11 @@ package pia.dao.jpa;
 
 import pia.dao.GenericDao;
 import pia.data.IEntity;
-import pia.util.DBManager;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 
 public class GenericDaoJpa<E extends IEntity<PK>, PK extends Serializable> implements GenericDao<E, PK> {
     protected EntityManager em;
@@ -16,7 +16,23 @@ public class GenericDaoJpa<E extends IEntity<PK>, PK extends Serializable> imple
      * @param persistedClass entity type to be persisted by this instance
      */
     public GenericDaoJpa(Class<E> persistedClass) {
-        this.em = DBManager.createEntityManager();
+        Class db = null;
+
+        try {
+            db = Class.forName("pia.util.DBManager");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            this.em = (EntityManager) db.getDeclaredMethod("createEntityManager").invoke(null);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
         this.persistedClass = persistedClass;
     }
 

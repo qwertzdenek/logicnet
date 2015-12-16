@@ -9,10 +9,9 @@
         <artifactId>pia-parent</artifactId>
         <version>1.0</version>
     </parent>
-    <artifactId>pia-jaas-test</artifactId>
-    <packaging>jar</packaging>
+    <artifactId>pia-jaas</artifactId>
 
-    <name>PIA Jetty Test</name>
+    <name>PIA JAAS</name>
 
     <dependencies>
         <dependency>
@@ -20,11 +19,6 @@
             <artifactId>jetty-jaas</artifactId>
             <version>${jetty.version}</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.sonatype.mavenbook.multi</groupId>
-            <artifactId>pia-db</artifactId>
-            <version>1.0</version>
         </dependency>
     </dependencies>
 </project>

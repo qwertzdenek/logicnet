@@ -9,7 +9,7 @@
         <properties>
             <!-- JDBC Connection configuration -->
             <property name="javax.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver"/>
-            <property name="javax.persistence.jdbc.password" value="minitab"/>
+            <property name="javax.persistence.jdbc.password" value="sp"/>
             <property name="javax.persistence.jdbc.user" value="pia"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost/pia"/>
 

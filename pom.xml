@@ -12,13 +12,13 @@
 
     <properties>
         <jetty.version>9.3.6.v20151106</jetty.version>
+        <hibernate.version>5.0.4.Final</hibernate.version>
     </properties>
 
     <modules>
         <module>app</module>
-        <module>db</module>
         <module>jetty</module>
-        <module>test_login_module</module>
+        <module>jaas</module>
     </modules>
 
     <build>
