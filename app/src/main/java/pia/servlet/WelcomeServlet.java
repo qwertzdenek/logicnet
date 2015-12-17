@@ -1,14 +1,21 @@
 package pia.servlet;
 
-import pia.dao.GenericDao;
+import org.eclipse.jetty.util.log.Log;
+import pia.dao.AccountDao;
+import pia.dao.RoleDao;
 import pia.dao.jpa.AccountDaoJpa;
+import pia.dao.jpa.RoleDaoJpa;
 import pia.data.Account;
+import pia.data.Role;
+import pia.util.DBManager;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Date: 7.11.14
@@ -16,10 +23,10 @@ import java.io.IOException;
  * @author Zdeněk Janeček
  */
 public class WelcomeServlet extends HttpServlet {
-    GenericDao<Account, Long> ad;
+    AccountDao ad;
 
     public WelcomeServlet() {
-        this.ad = new AccountDaoJpa();
+        this.ad = new AccountDaoJpa(DBManager.createEntityManager());
     }
 
     @Override

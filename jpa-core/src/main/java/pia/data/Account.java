@@ -1,7 +1,7 @@
 package pia.data;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -37,6 +37,7 @@ public class Account extends BaseEntity<Long> {
         this.password = password;
     }
 
+    @Temporal(value = TemporalType.DATE)
     public Date getBirthday() {
         return birthday;
     }
@@ -55,7 +56,7 @@ public class Account extends BaseEntity<Long> {
     }
 
     @ManyToMany
-    @JoinTable(name = "account_roles", joinColumns = @JoinColumn(name = "accounts", referencedColumnName = "nickname"),
+    @JoinTable(name = "account_roles", joinColumns = @JoinColumn(name = "accounts", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role", referencedColumnName = "id"))
     public Set<Role> getRoles() {
         return roles;

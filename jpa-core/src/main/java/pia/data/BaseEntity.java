@@ -24,6 +24,7 @@ public abstract class BaseEntity<PK extends Serializable> implements Serializabl
         this.id = id;
     }
 
+    @Override
     @Transient
     public PK getPK() {
         return getId();

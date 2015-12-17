@@ -15,24 +15,8 @@ public class GenericDaoJpa<E extends IEntity<PK>, PK extends Serializable> imple
     /**
      * @param persistedClass entity type to be persisted by this instance
      */
-    public GenericDaoJpa(Class<E> persistedClass) {
-        Class db = null;
-
-        try {
-            db = Class.forName("pia.util.DBManager");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            this.em = (EntityManager) db.getDeclaredMethod("createEntityManager").invoke(null);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+    public GenericDaoJpa(EntityManager em, Class<E> persistedClass) {
+        this.em = em;
         this.persistedClass = persistedClass;
     }
 
