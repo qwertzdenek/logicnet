@@ -55,8 +55,9 @@ public class Account extends BaseEntity<Long> {
         this.profilePicture = profilePicture;
     }
 
-    @ManyToMany
-    @JoinTable(name = "account_roles", joinColumns = @JoinColumn(name = "accounts", referencedColumnName = "id"),
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "account_roles",
+            joinColumns = @JoinColumn(name = "account", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role", referencedColumnName = "id"))
     public Set<Role> getRoles() {
         return roles;

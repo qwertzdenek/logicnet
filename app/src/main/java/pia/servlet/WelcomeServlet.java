@@ -9,11 +9,13 @@ import pia.data.Account;
 import pia.data.Role;
 import pia.util.DBManager;
 
+import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,9 +26,12 @@ import java.util.Set;
  */
 public class WelcomeServlet extends HttpServlet {
     AccountDao ad;
+    RoleDao rd;
 
     public WelcomeServlet() {
-        this.ad = new AccountDaoJpa(DBManager.createEntityManager());
+        EntityManager em = DBManager.createEntityManager();
+        this.ad = new AccountDaoJpa(em);
+        this.rd = new RoleDaoJpa(em);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package pia.servlet;
 
+import pia.dao.AccountDao;
 import pia.dao.GenericDao;
 import pia.dao.jpa.AccountDaoJpa;
 import pia.data.Account;
@@ -17,7 +18,7 @@ import java.io.IOException;
  * @author Zdeněk Janeček
  */
 public class LoginServlet extends HttpServlet {
-    GenericDao<Account, Long> ad;
+    AccountDao ad;
 
     public LoginServlet() {
         this.ad = new AccountDaoJpa(DBManager.createEntityManager());
