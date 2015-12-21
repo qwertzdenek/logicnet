@@ -15,7 +15,6 @@
 
     <properties>
         <javax.servlet.version>3.1.0</javax.servlet.version>
-        <javax.servlet.jsp.jstl.version>1.2-rev-1</javax.servlet.jsp.jstl.version>
         <hibernate.version>5.0.4.Final</hibernate.version>
     </properties>
 
@@ -34,12 +33,6 @@
             <artifactId>javax.servlet-api</artifactId>
             <version>${javax.servlet.version}</version>
             <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.servlet.jsp.jstl</groupId>
-            <artifactId>jstl-api</artifactId>
-            <version>${javax.servlet.jsp.jstl.version}</version>
         </dependency>
 
         <dependency>
@@ -83,6 +76,19 @@
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-jaas</artifactId>
             <version>${jetty.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.myfaces.core</groupId>
+            <artifactId>myfaces-api</artifactId>
+            <version>${myfaces.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.myfaces.core</groupId>
+            <artifactId>myfaces-impl</artifactId>
+            <version>${myfaces.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

@@ -13,6 +13,7 @@
     <properties>
         <jetty.version>9.3.6.v20151106</jetty.version>
         <hibernate.version>5.0.4.Final</hibernate.version>
+        <myfaces.version>2.2.9</myfaces.version>
     </properties>
 
     <modules>

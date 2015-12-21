@@ -33,25 +33,17 @@
                         <version>1.0</version>
                         <scope>runtime</scope>
                     </dependency>
+                    <dependency>
+                        <groupId>org.apache.myfaces.core</groupId>
+                        <artifactId>myfaces-api</artifactId>
+                        <version>${myfaces.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.myfaces.core</groupId>
+                        <artifactId>myfaces-impl</artifactId>
+                        <version>${myfaces.version}</version>
+                    </dependency>
                 </dependencies>
-                <!--
-                <executions>
-                    <execution>
-                        <id>start-jetty</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>deploy-war</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>stop-jetty</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>stop</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                -->
             </plugin>
         </plugins>
     </build>

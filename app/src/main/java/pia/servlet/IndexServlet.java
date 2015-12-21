@@ -5,6 +5,7 @@ import pia.dao.jpa.AccountDaoJpa;
 import pia.data.Account;
 import pia.util.DBManager;
 
+import javax.faces.context.FacesContext;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -30,11 +31,9 @@ public class IndexServlet extends HttpServlet {
         HttpSession session = req.getSession();
 
         if (session.isNew()) {
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/welcome");
-            dispatcher.forward(req, resp);
+            FacesContext.getCurrentInstance().getExternalContext().dispatch("/faces/welcome.xhtml");
         } else {
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/stream");
-            dispatcher.forward(req, resp);
+            FacesContext.getCurrentInstance().getExternalContext().dispatch("/faces/stream.xhtml");
         }
     }
 }
