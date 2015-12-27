@@ -1,6 +1,5 @@
 package pia.util;
 
-import org.eclipse.jetty.util.log.Log;
 import pia.dao.AccountDao;
 import pia.dao.RoleDao;
 import pia.dao.jpa.AccountDaoJpa;
@@ -53,7 +52,7 @@ public class DBManager implements ServletContextListener {
 
         EntityManager em = createEntityManager();
         AccountDao ad = new AccountDaoJpa(em);
-        Log.getLog().info("Created "+ad.findByNickname("root").toString());
+        System.out.println("Created "+ad.findByNickname("root").toString());
     }
 
     @Override

@@ -11,14 +11,16 @@
     <name>PIA Parent Project</name>
 
     <properties>
-        <jetty.version>9.3.6.v20151106</jetty.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <version.openejb>6.0-6</version.openejb>
+        <version.openjpa>2.3.0</version.openjpa>
         <hibernate.version>5.0.4.Final</hibernate.version>
         <myfaces.version>2.2.9</myfaces.version>
     </properties>
 
     <modules>
         <module>app</module>
-        <module>jetty</module>
         <module>jaas</module>
         <module>jpa-core</module>
     </modules>
@@ -36,4 +38,12 @@
             </plugin>
         </plugins>
     </build>
+
+    <repositories>
+        <repository>
+            <id>apache-snapshot</id>
+            <name>Apache Snapshot Repository</name>
+            <url>https://repository.apache.org/content/groups/snapshots/</url>
+        </repository>
+    </repositories>
 </project>

@@ -2,7 +2,8 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
 <h:head>
     <title>
         <ui:insert name="title">LogicNet social network</ui:insert>
@@ -13,9 +14,11 @@
     <h:outputStylesheet name="style.css" library="css" />
 </h:head>
 <h:body>
+    <f:view>
     <ui:insert name="header">header</ui:insert>
     <ui:insert name="content">content</ui:insert>
     <ui:insert name="footer">footer</ui:insert>
+    </f:view>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script type="application/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
