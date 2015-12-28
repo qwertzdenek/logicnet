@@ -5,18 +5,19 @@ import pia.data.IEntity;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceContext;
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 
-public class GenericDaoJpa<E extends IEntity<PK>, PK extends Serializable> implements GenericDao<E, PK> {
+public abstract class GenericDaoJpa<E extends IEntity<PK>, PK extends Serializable> implements GenericDao<E, PK> {
+    @PersistenceContext(unitName = "kiv.janecekz")
     protected EntityManager em;
+
     protected Class<E> persistedClass;
 
     /**
      * @param persistedClass entity type to be persisted by this instance
      */
-    public GenericDaoJpa(EntityManager em, Class<E> persistedClass) {
-        this.em = em;
+    public GenericDaoJpa(Class<E> persistedClass) {
         this.persistedClass = persistedClass;
     }
 

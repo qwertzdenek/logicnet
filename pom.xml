@@ -13,10 +13,10 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <version.openejb>6.0-6</version.openejb>
-        <version.openjpa>2.3.0</version.openjpa>
-        <hibernate.version>5.0.4.Final</hibernate.version>
+        <version.openejb>7.0.0-M1</version.openejb>
+        <version.tomee>7.0</version.tomee>
         <myfaces.version>2.2.9</myfaces.version>
+        <version.hibernate>5.0.6.Final</version.hibernate>
     </properties>
 
     <modules>
@@ -38,12 +38,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <repositories>
-        <repository>
-            <id>apache-snapshot</id>
-            <name>Apache Snapshot Repository</name>
-            <url>https://repository.apache.org/content/groups/snapshots/</url>
-        </repository>
-    </repositories>
 </project>

@@ -1,14 +1,15 @@
 package pia.dao.jpa;
 
 import pia.dao.AccountDao;
+import pia.dao.JPADAO;
 import pia.data.Account;
 
-import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+@JPADAO
 public class AccountDaoJpa extends GenericDaoJpa<Account, Long> implements AccountDao {
-    public AccountDaoJpa(EntityManager em) {
-        super(em, Account.class);
+    public AccountDaoJpa() {
+        super(Account.class);
     }
 
     @Override

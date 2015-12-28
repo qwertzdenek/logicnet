@@ -1,10 +1,12 @@
 package pia.servlet;
 
+import pia.dao.AccountDao;
 import pia.dao.GenericDao;
+import pia.dao.JPADAO;
 import pia.dao.jpa.AccountDaoJpa;
 import pia.data.Account;
-import pia.util.DBManager;
 
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,11 +19,9 @@ import java.io.IOException;
  * @author Zdeněk Janeček
  */
 public class ErrorControlServlet extends HttpServlet {
-    GenericDao<Account, Long> ad;
-
-    public ErrorControlServlet() {
-        this.ad = new AccountDaoJpa(DBManager.createEntityManager());
-    }
+    @Inject
+    @JPADAO
+    private AccountDao ad;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

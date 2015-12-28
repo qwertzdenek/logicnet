@@ -1,9 +1,6 @@
 package pia.dao;
 
-import pia.data.Account;
 import pia.data.Role;
-
-import javax.persistence.NoResultException;
 
 /**
  * DAO interface for the User entity

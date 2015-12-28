@@ -5,8 +5,6 @@ import pia.dao.AccountDao;
 import pia.dao.jpa.AccountDaoJpa;
 import pia.data.Account;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Persistence;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.*;
 import javax.security.auth.login.LoginException;
@@ -17,9 +15,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
 public class JPALoginService implements LoginModule {
-    private static final String PERSISTENCE_UNIT = "kiv.janecekz.jaas";
     private AccountDao ad;
-    private EntityManager em;
 
     private CallbackHandler handler;
     private Subject subject;
@@ -30,9 +26,7 @@ public class JPALoginService implements LoginModule {
 
     @Override
     public void initialize(Subject subject, CallbackHandler callbackHandler, Map<String, ?> sharedState, Map<String, ?> options) {
-        // TODO: do it as singleton bean
-        this.em = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT).createEntityManager();
-        this.ad = new AccountDaoJpa(em);
+        this.ad = new AccountDaoJpa();
 
         // Store the handler
         this.handler = callbackHandler;
@@ -47,13 +41,18 @@ public class JPALoginService implements LoginModule {
         }
     }
 
-    private boolean checkUserPassword(String accountName, String testedPassword) {
+    private boolean checkUserPassword(String accountName, String testedPassword) throws LoginException {
         // read password from the database
-        ad.getTransaction().begin();
-        final Account account = ad.findByNickname(accountName);
-        ad.getTransaction().commit();
-
-        String realPassword = account.getPassword();
+        String realPassword;
+        try {
+            ad.getTransaction().begin();
+            final Account account = ad.findByNickname(accountName);
+            realPassword = account.getPassword();
+        } catch (Exception e) {
+            throw new LoginException("Authentication failed");
+        } finally {
+            ad.getTransaction().commit();
+        }
 
         md.update(realPassword.getBytes());
         byte[] realPasswordObf = md.digest();

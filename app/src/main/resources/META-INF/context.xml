@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Context>
-    <Realm className="org.apache.catalina.realm.JAASRealm"
-           appName="pia_realm"
-           userClassNames="pia.jaas.AccountPrincipal"
-           roleClassNames="pia.jaas.RolePrincipal" />
+<?xml version='1.0' encoding='UTF-8' ?>
+<Context reloadable="true">
+<Realm className="org.apache.catalina.realm.JAASRealm"
+       appName="pia_realm"
+       userClassNames="pia.jaas.AccountPrincipal"
+       roleClassNames="pia.jaas.RolePrincipal" />
 </Context>
