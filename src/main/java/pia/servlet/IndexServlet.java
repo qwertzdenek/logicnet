@@ -25,8 +25,6 @@ public class IndexServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // TODO: gather user informations
-
-        resp.getWriter().write("jsem tu");
+        resp.getWriter().write("Hello");
     }
 }
