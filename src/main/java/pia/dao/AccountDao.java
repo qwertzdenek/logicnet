@@ -11,6 +11,6 @@ import javax.persistence.NoResultException;
  *
  * @author Jakub Danek
  */
-public interface AccountDao extends GenericDao<Account, Long> {
+public interface AccountDao extends GenericDao<Account, String> {
     Account findByNickname(String username) throws NoResultException;
 }

@@ -1,31 +1,27 @@
 package pia.data;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "accounts")
-public class Account extends BaseEntity<Long> {
-    private String nickname;
+public class Account extends BaseEntity<String> {
     private String password;
     private Date birthday;
     private String profilePicture;
 
-    private Set<Role> roles;
+    private Set<String> roles = new LinkedHashSet<>();
 
-    public Account() {
-        this.roles = new LinkedHashSet<>();
+    @Id
+    @Column(name = "account_id")
+    @Override
+    public String getId() {
+        return id;
     }
 
-    @Column(nullable = false)
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    @Override
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Column(nullable = false)
@@ -55,22 +51,25 @@ public class Account extends BaseEntity<Long> {
         this.profilePicture = profilePicture;
     }
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "account_roles",
-            joinColumns = @JoinColumn(name = "account", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "role", referencedColumnName = "id"))
-    public Set<Role> getRoles() {
+    @ElementCollection
+    @CollectionTable(name="account_roles", joinColumns=@JoinColumn(name="account_id"))
+    @Column(name="role")
+    public Set<String> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(Set<String> roles) {
         this.roles = roles;
+    }
+
+    public void addRole(String role) {
+        this.roles.add(role);
     }
 
     @Override
     public String toString() {
         return "Account{" +
-                "nickname='" + nickname + '\'' +
+                "nickname='" + getId() + '\'' +
                 ", birthday=" + birthday +
                 ", profilePicture='" + profilePicture + '\'' +
                 '}';
@@ -83,7 +82,7 @@ public class Account extends BaseEntity<Long> {
 
         Account account = (Account) o;
 
-        if (!nickname.equals(account.nickname)) return false;
+        if (!getId().equals(account.getId())) return false;
         if (!password.equals(account.password)) return false;
         if (birthday != null ? !birthday.equals(account.birthday) : account.birthday != null) return false;
         return profilePicture.equals(account.profilePicture);
@@ -92,7 +91,7 @@ public class Account extends BaseEntity<Long> {
 
     @Override
     public int hashCode() {
-        int result = nickname.hashCode();
+        int result = getId().hashCode();
         result = 31 * result + password.hashCode();
         result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
         result = 31 * result + profilePicture.hashCode();

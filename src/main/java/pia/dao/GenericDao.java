@@ -13,14 +13,6 @@ import java.io.Serializable;
  * @author Jakub Danek
  */
 public interface GenericDao<E extends IEntity<PK>, PK extends Serializable> {
-
-    /**
-     * get db transaction
-     *
-     * @return Entity transaction
-     */
-    public EntityTransaction getTransaction();
-
     /**
      * Either inserts new or updates existing instance.
      *
@@ -28,6 +20,12 @@ public interface GenericDao<E extends IEntity<PK>, PK extends Serializable> {
      * @return persisted instance
      */
     E save(E instance);
+
+    /**
+     * It will persist entity even if has PK. You have to set PK before!
+     * @param instance
+     */
+    void store(E instance);
 
     /**
      * @param id
@@ -41,5 +39,4 @@ public interface GenericDao<E extends IEntity<PK>, PK extends Serializable> {
      * @param id if of the entity instance
      */
     void delete(PK id);
-
 }

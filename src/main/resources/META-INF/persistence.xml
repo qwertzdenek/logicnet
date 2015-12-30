@@ -5,15 +5,16 @@
 
 <persistence-unit name="kiv.janecekz" transaction-type="JTA">
     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-    <jta-data-source>piaDatabase</jta-data-source>
-    <non-jta-data-source>piaDatabaseUnmanaged</non-jta-data-source>
+    <jta-data-source>java:openejb/Resource/piaDatabase</jta-data-source>
 
     <properties>
-        <!-- JDBC Connection configuration -->
+<!--
+        &lt;!&ndash; JDBC Connection configuration &ndash;&gt;
         <property name="javax.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver" />
         <property name="javax.persistence.jdbc.password" value="sp" />
         <property name="javax.persistence.jdbc.user" value="pia" />
         <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost/pia" />
+-->
 
         <!-- Hibernate-specific configuration -->
         <property name="hibernate.hbm2ddl.auto" value="create" />

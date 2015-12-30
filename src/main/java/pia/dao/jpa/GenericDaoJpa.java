@@ -4,7 +4,6 @@ import pia.dao.GenericDao;
 import pia.data.IEntity;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceContext;
 import java.io.Serializable;
 
@@ -21,10 +20,6 @@ public abstract class GenericDaoJpa<E extends IEntity<PK>, PK extends Serializab
         this.persistedClass = persistedClass;
     }
 
-    public EntityTransaction getTransaction() {
-        return this.em.getTransaction();
-    }
-
     public E save(E instance) {
         if (instance.getPK() == null) {
             em.persist(instance);
@@ -32,6 +27,10 @@ public abstract class GenericDaoJpa<E extends IEntity<PK>, PK extends Serializab
         } else {
             return em.merge(instance);
         }
+    }
+
+    public void store(E instance) {
+        em.persist(instance);
     }
 
     public E findOne(PK id) {

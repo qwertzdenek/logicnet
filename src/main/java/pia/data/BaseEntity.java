@@ -1,6 +1,8 @@
 package pia.data;
 
-import javax.persistence.*;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 import java.io.Serializable;
 
 /**
@@ -14,8 +16,7 @@ import java.io.Serializable;
 public abstract class BaseEntity<PK extends Serializable> implements Serializable, IEntity<PK> {
     protected PK id;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Transient
     public PK getId() {
         return id;
     }

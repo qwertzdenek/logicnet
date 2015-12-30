@@ -7,7 +7,7 @@ import pia.data.Account;
 import javax.persistence.Query;
 
 @JPADAO
-public class AccountDaoJpa extends GenericDaoJpa<Account, Long> implements AccountDao {
+public class AccountDaoJpa extends GenericDaoJpa<Account, String> implements AccountDao {
     public AccountDaoJpa() {
         super(Account.class);
     }
