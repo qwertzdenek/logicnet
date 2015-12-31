@@ -18,6 +18,7 @@ public class MaintenanceBean {
         Account root = new Account();
         root.setBirthday(new Date(0));
         root.setId("root");
+        root.setName("Zdeněk Janeček");
         root.setPassword("strong");
         root.setProfilePicture("neco.png");
         root.addRole("user");

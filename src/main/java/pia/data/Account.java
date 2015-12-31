@@ -6,6 +6,7 @@ import java.util.*;
 @Entity
 @Table(name = "accounts")
 public class Account extends BaseEntity<String> {
+    private String name;
     private String password;
     private Date birthday;
     private String profilePicture;
@@ -22,6 +23,15 @@ public class Account extends BaseEntity<String> {
     @Override
     public void setId(String id) {
         this.id = id;
+    }
+
+    @Column(nullable = false)
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Column(nullable = false)

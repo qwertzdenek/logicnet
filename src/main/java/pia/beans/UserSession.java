@@ -1,29 +1,35 @@
 package pia.beans;
 
+import pia.dao.AccountDao;
+import pia.dao.JPADAO;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
-@Named(value = "userSession")
+@Named
 @RequestScoped
 public class UserSession {
+    @Inject
+    @JPADAO
+    private AccountDao ad;
+
     @Inject
     HttpServletRequest req;
 
     public String logout() {
-        System.out.println("LOGOUT");
         try {
             req.logout();
         } catch (ServletException e) {
             System.out.println("WAT?");
         }
-        return "/faces/welcome.xhtml?faces-redirect=true";
+        return "/welcome.xhtml?faces-redirect=true";
     }
 
     public String getUsername() {
-        return req.getUserPrincipal().getName();
+        return ad.findOne(req.getUserPrincipal().getName()).getName();
     }
 
     @Override

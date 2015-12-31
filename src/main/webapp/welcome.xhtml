@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-<ui:composition template="WEB-INF/templates/view.xhtml">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:b="http://butterfaces.larmic.de/components">
+<ui:composition template="/WEB-INF/templates/view.xhtml">
     <ui:define name="title">welcome to LogicNet</ui:define>
 
     <ui:define name="content">
+        <b:activateLibraries id="input"
+                             rendered="true">
+        </b:activateLibraries>
+
         <div class="jumbotron">
             <div class="container">
                 <h1>Logic Net</h1>
@@ -14,7 +19,7 @@
 
                 <p>
                     <a class="btn btn-primary btn-lg" href="#register" role="button" data-toggle="tab">Register Now</a>
-                    <a class="btn btn-success btn-lg" href="login.xhtml" role="button">Sign In</a>
+                    <a class="btn btn-success btn-lg" href="user/stream.xhtml" role="button">Connect</a>
                 </p>
             </div>
         </div>

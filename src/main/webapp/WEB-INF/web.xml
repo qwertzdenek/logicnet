@@ -16,6 +16,11 @@
     </context-param>
 
     <context-param>
+        <param-name>de.larmic.butterfaces.useCompressedResources</param-name>
+        <param-value>true</param-value>
+    </context-param>
+
+    <context-param>
         <description>Location to store uploaded file</description>
         <param-name>upload-dir</param-name>
         <param-value>/var/lib/logicnet</param-value>
@@ -26,7 +31,7 @@
             <web-resource-name>
                 TestAuth
             </web-resource-name>
-            <url-pattern>/home</url-pattern>
+            <url-pattern>/user/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <description>
@@ -52,16 +57,15 @@
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
+
     <servlet>
         <servlet-name>Home</servlet-name>
         <servlet-class>pia.servlet.IndexServlet</servlet-class>
     </servlet>
-    
     <servlet-mapping>
         <servlet-name>Home</servlet-name>
         <url-pattern>/home</url-pattern>

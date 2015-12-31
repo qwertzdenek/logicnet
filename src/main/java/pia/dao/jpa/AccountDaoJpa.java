@@ -14,7 +14,7 @@ public class AccountDaoJpa extends GenericDaoJpa<Account, String> implements Acc
 
     @Override
     public Account findByNickname(String nickname) {
-        Query q = em.createQuery("SELECT a FROM Account a WHERE a.nickname = :name", Account.class);
+        Query q = em.createQuery("SELECT a FROM Account a WHERE a.name = :name", Account.class);
         q.setParameter("name", nickname);
 
         return (Account) q.getSingleResult();

@@ -47,6 +47,7 @@
                     <libs>
                         <lib>org.mariadb.jdbc:mariadb-java-client:1.3.3</lib>
                     </libs>
+                    <reloadOnUpdate>true</reloadOnUpdate>
                 </configuration>
             </plugin>
         </plugins>
@@ -87,9 +88,9 @@
             <version>${version.hibernate}</version>
         </dependency>
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-c3p0</artifactId>
-            <version>${version.hibernate}</version>
+            <groupId>de.larmic.butterfaces</groupId>
+            <artifactId>components</artifactId>
+            <version>1.9.13</version>
         </dependency>
     </dependencies>
 </project>
