@@ -71,7 +71,8 @@
         <url-pattern>/home</url-pattern>
     </servlet-mapping>
 
-<!--    <servlet>
+    <!--
+    <servlet>
         <servlet-name>Register</servlet-name>
         <servlet-class>pia.servlet.RegisterServlet</servlet-class>
         <multipart-config>
@@ -80,7 +81,13 @@
             <max-request-size>418018841</max-request-size>
             <file-size-threshold>1048576</file-size-threshold>
         </multipart-config>
-    </servlet>-->
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Register</servlet-name>
+        <url-pattern>/register</url-pattern>
+    </servlet-mapping>
+    -->
 
     <servlet>
         <servlet-name>ErrorControl</servlet-name>
@@ -103,6 +110,6 @@
     </servlet-mapping>
 
     <welcome-file-list>
-        <welcome-file>/home</welcome-file>
+        <welcome-file>/welcome.xhtml</welcome-file>
     </welcome-file-list>
 </web-app>

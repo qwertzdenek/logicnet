@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+<cc:interface>
+    <cc:attribute name="body" required="true"/>
+    <cc:attribute name="date" required="true"/>
+    <cc:attribute name="type" default="PLAIN"/>
+</cc:interface>
+
+<cc:implementation>
+    <c:choose>
+        <c:when test="#{cc.attrs.type == 'FULL'}">
+            <c:set var="panelType" value="panel-success" />
+        </c:when>
+        <c:otherwise>
+            <c:set var="panelType" value="panel-default" />
+        </c:otherwise>
+    </c:choose>
+    <div class="panel #{panelType}">
+        <div class="panel-body">
+            #{cc.attrs.body}
+        </div>
+
+        <div class="panel-footer">
+            <p>Published on #{cc.attrs.date}.</p>
+
+            <c:choose>
+                <c:when test="#{cc.attrs.type == 'BASIC'}">
+                    <button class="btn btn-success" type="button">
+                        <span class="glyphicon glyphicon-heart" />
+                    </button>
+                </c:when>
+                <c:when test="#{cc.attrs.type == 'FULL'}">
+                    <div class="btn-group">
+                        <button class="btn btn-primary" type="button">
+                            <span class="glyphicon glyphicon-user" />
+                        </button>
+                        <button class="btn btn-danger" type="button">
+                            <span class="glyphicon glyphicon-trash" />
+                        </button>
+                        <button class="btn btn-success" type="button">
+                            <span class="glyphicon glyphicon-heart" />
+                        </button>
+                    </div>
+                </c:when>
+            </c:choose>
+
+        </div>
+    </div>
+</cc:implementation>
+
+</html>

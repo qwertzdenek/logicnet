@@ -32,7 +32,7 @@ public class DataManager implements ServletContextListener {
         context.log("** DataManager closing");
     }
 
-    public static String store(ServletContext context, Part file) {
+    public static String store(Part file) {
         if (uploadDir == null) {
             throw new IllegalStateException("Context is not initialized yet.");
         }
@@ -58,7 +58,7 @@ public class DataManager implements ServletContextListener {
         try {
             file.write(path.toString());
         } catch (IOException e) {
-            context.log("** file I/O error > " + path.toString());
+            return null;
         }
 
         return name;

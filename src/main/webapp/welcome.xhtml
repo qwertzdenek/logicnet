@@ -2,15 +2,15 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:b="http://butterfaces.larmic.de/components">
+      xmlns:b="http://butterfaces.larmic.de/components"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:mc="http://xmlns.jcp.org/jsf/composite/components"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 <ui:composition template="/WEB-INF/templates/view.xhtml">
     <ui:define name="title">welcome to LogicNet</ui:define>
 
     <ui:define name="content">
-        <b:activateLibraries id="input"
-                             rendered="true">
-        </b:activateLibraries>
-
         <div class="jumbotron">
             <div class="container">
                 <h1>Logic Net</h1>
@@ -30,54 +30,36 @@
 
                     <h1>Trending Now</h1>
 
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            Lorem ipsum dolor sit amet.
-                        </div>
-                    </div>
-
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            Bootstrap is downloadable in two forms, within which
-                            you'll find the following directories and files,
-                            logically grouping common resources and providing both
-                            compiled and minified variations.
-                        </div>
-                    </div>
+                    <c:forEach items="#{trendingService.trending}" var="post">
+                        <mc:post date="#{post.date}" body="#{post.content}" />
+                    </c:forEach>
 
                 </div>
 
                 <div id="register" class="tab-pane fade">
-                    <form method="post" action="register" enctype="multipart/form-data">
-                        <div class="form-group">
-                            <label for="nickname">Nickname</label>
-                            <input type="text" class="form-control" id="nickname" placeholder="Nickname" />
-                        </div>
+                    <h:form id="registerForm" method="post" action="register" enctype="multipart/form-data">
+                        <b:text value="#{registerBean.realName}" label="Real name" required="true" autoFocus="true" />
 
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" class="form-control" id="password" placeholder="Password" />
-                            <input type="password" class="form-control" id="password-repeat" placeholder="Repeat" />
-                        </div>
+                        <b:text value="#{registerBean.nickname}" label="Nickname" required="true">
+                            <b:tooltip>
+                                Will be used for login. It must be unique.
+                            </b:tooltip>
+                            <f:validator binding="#{nicknameValidator}" />
+                        </b:text>
 
-                        <div class="form-group">
-                            <label for="pickBirthdate">Birthdate</label>
-                            <input type="date" class="form-control" id="pickBirthdate" placeholder="Birthdate" />
-                        </div>
+                        <b:calendar pickTime="false" value="#{registerBean.birthdate}" label="Birthdate" />
 
-                        <div class="form-group">
-                            <label for="profilePicture">Profile picture</label>
-                            <input type="file" id="profilePicture" />
-                            <p class="help-block">Upload your profile picture.</p>
-                        </div>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox">Agree with privacy conditions.</input>
-                            </label>
-                        </div>
-                        <button type="submit" class="btn btn-default">Submit</button>
-                    </form>
+                        <b:section label="Password">
+                            <h:inputSecret id="password" value="#{registerBean.password}" label="Password" required="true" />
+                            <h:inputSecret value="" validator="#{samePasswordValidator.validate}" />
+                        </b:section>
 
+                        <b:section label="Profile picture">
+                            <h:inputFile styleClass="btn btn-default" value="#{registerBean.picture}" required="true" />
+                        </b:section>
+
+                        <h:commandButton actionListener="#{registerBean.register}" value="Submit" />
+                    </h:form>
                 </div>
             </div>
         </div>

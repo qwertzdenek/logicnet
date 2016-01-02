@@ -9,7 +9,7 @@ import javax.inject.Inject;
 import java.sql.Date;
 
 @Stateful
-public class MaintenanceBean {
+public class MaintenanceService {
     @Inject
     @JPADAO
     private AccountDao ad;
