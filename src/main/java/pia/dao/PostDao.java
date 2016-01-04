@@ -1,6 +1,9 @@
 package pia.dao;
 
+import pia.data.Account;
 import pia.data.Post;
+
+import java.util.List;
 
 /**
  * DAO interface for the User entity
@@ -10,5 +13,6 @@ import pia.data.Post;
  * @author Jakub Danek
  */
 public interface PostDao extends GenericDao<Post, Long> {
-
+    List<Post> getMostPopularDay();
+    List<Post> getLatestFrom(Account account);
 }

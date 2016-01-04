@@ -3,9 +3,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:b="http://butterfaces.larmic.de/components"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:mc="http://xmlns.jcp.org/jsf/composite/components"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+>
 <ui:composition template="/WEB-INF/templates/view-full.xhtml">
     <ui:define name="title">LogicNet public stream</ui:define>
 
@@ -15,22 +17,23 @@
                       title="Dear #{userSession.username}, do you really want to logout?">
             <p>Your session will be lost.</p>
             <h:form>
-                <h:outputLabel value="Do you want to logout?" for="logout"  />
-                <h:commandButton class="btn btn-default" value="Logout" id="logout" action="#{userSession.logout}" />
+                <h:outputLabel value="Do you want to logout?" for="logout"/>
+                <h:commandButton class="btn btn-default" value="Logout" id="logout" action="#{userSession.logout}"/>
             </h:form>
         </b:modalPanel>
 
         <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                            aria-expanded="false" aria-controls="navbar">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"/>
                         <span class="icon-bar"/>
                         <span class="icon-bar"/>
                     </button>
-                    <a class="navbar-brand" href="#" >
-                        <span class="glyphicon glyphicon-book" aria-hidden="true" />
+                    <a class="navbar-brand" href="#">
+                        <span class="glyphicon glyphicon-book" aria-hidden="true"/>
                         LogicNet
                     </a>
                 </div>
@@ -48,9 +51,9 @@
         <div class="container">
             <div class="page-header">
                 <div class="input-group col-md-12">
-                    <input type="text" class="search-query form-control" placeholder="Share something interesting." />
+                    <input type="text" class="search-query form-control" placeholder="Share something interesting."/>
           <span class="input-group-btn">
-            <button class="btn btn-success" type="button">
+            <button class="btn btn-success" type="button" onclick="friendRequest()">
                 <span class="glyphicon glyphicon-flag"/>
             </button>
           </span>
@@ -63,8 +66,13 @@
                 <div class="col-md-6">
                     <h2>Now on the Net</h2>
 
-                    <mc:post body="Natdar" date="včera" type="FULL" />
-                    <mc:post body="Lorem ipsum." date="ještě dřív" type="FULL" />
+                    <c:forEach items="#{postRecommenderService.recommended}" var="post">
+                        <c:set value="#{post.dateTime}" var="formattedDate">
+                            <f:convertDateTime pattern="dd/MM/yyyy m:s" />
+                        </c:set>
+
+                        <mc:post date="#{formattedDate}" body="#{post.content}" />
+                    </c:forEach>
 
                 </div>
                 <div class="col-md-6">
@@ -94,7 +102,7 @@
                 {text: "domus", weight: 7, link: "/tag/domus"}
             ];
 
-            $(function() {
+            $(function () {
                 // When DOM is ready, select the container element and call the jQCloud method, passing the array of words as the first argument.
                 $("#example").jQCloud(word_array);
             });

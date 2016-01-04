@@ -12,6 +12,8 @@ public class Account extends BaseEntity<String> {
     private String profilePicture;
 
     private Set<String> roles = new LinkedHashSet<>();
+    private Set<Post> posts = new LinkedHashSet<>();
+    private Set<Post> likedPosts = new LinkedHashSet<>();
 
     @Id
     @Column(name = "account_id")
@@ -75,6 +77,32 @@ public class Account extends BaseEntity<String> {
     public void addRole(String role) {
         this.roles.add(role);
     }
+
+    @OneToMany(mappedBy = "writer")
+    public Set<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(Set<Post> posts) {
+        this.posts = posts;
+    }
+
+    public void addPost(Post post) { this.posts.add(post); }
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "account_likes",
+            joinColumns = @JoinColumn(name = "account_id", referencedColumnName = "account_id"),
+            inverseJoinColumns = @JoinColumn(name = "post_id", referencedColumnName = "id"))
+    public Set<Post> getLikedPosts() {
+        return likedPosts;
+    }
+
+    public void setLikedPosts(Set<Post> likedPosts) {
+        this.likedPosts = likedPosts;
+    }
+
+    public void addLike(Post post) { this.likedPosts.add(post); }
 
     @Override
     public String toString() {

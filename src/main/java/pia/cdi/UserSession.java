@@ -1,6 +1,7 @@
 package pia.cdi;
 
-import pia.beans.AccountService;
+import pia.dao.AccountDao;
+import pia.dao.JPADAO;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -12,7 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 @RequestScoped
 public class UserSession {
     @Inject
-    AccountService ac;
+    @JPADAO
+    AccountDao ad;
 
     @Inject
     HttpServletRequest req;
@@ -27,7 +29,11 @@ public class UserSession {
     }
 
     public String getUsername() {
-        return ac.getAccount(req.getUserPrincipal().getName()).getName();
+        if (req.getUserPrincipal() != null) {
+            return ad.findOne(req.getUserPrincipal().getName()).getName();
+        } else {
+            return null;
+        }
     }
 
     @Override

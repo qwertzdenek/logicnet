@@ -1,6 +1,7 @@
 package pia.validators;
 
-import pia.beans.AccountService;
+import pia.dao.AccountDao;
+import pia.dao.JPADAO;
 import pia.data.Account;
 
 import javax.enterprise.context.RequestScoped;
@@ -16,11 +17,12 @@ import javax.inject.Named;
 @RequestScoped
 public class NicknameValidator implements Validator {
     @Inject
-    AccountService ac;
+    @JPADAO
+    AccountDao ad;
 
     @Override
     public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
-        Account account = ac.getAccount((String) value);
+        Account account = ad.findOne((String) value);
         if (account != null) {
             throw new ValidatorException(new FacesMessage("This nickname is already used!"));
         }

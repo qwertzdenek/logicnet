@@ -1,67 +1,60 @@
 package pia.cdi;
 
-import pia.beans.AccountService;
-import pia.data.Account;
-import pia.util.DataManager;
+import pia.rest.AccountResource;
+import pia.rest.entities.AccountEntity;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.Part;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 @Named
 @SessionScoped
 public class RegisterBean implements Serializable {
     @Inject
-    AccountService rs;
+    AccountResource ar;
 
-    private String realName;
-    private String nickname;
-    private String password;
-    private String birthdate;
+    AccountEntity entity;
+
+    @PostConstruct
+    private void init() {
+        entity = new AccountEntity();
+    }
+
     private Part picture;
 
-    @Size(min = 8, message = "Name must be 8 characters long.")
     public String getRealName() {
-        return realName;
+        return entity.getReal_name();
     }
 
     public void setRealName(String realName) {
-        this.realName = realName;
+        entity.setReal_name(realName);
     }
 
-    @Size(min = 4, message = "Nickname must be at least 4 characters long.")
     public String getNickname() {
-        return nickname;
+        return entity.getNickname();
     }
 
     public void setNickname(String nickname) {
-        this.nickname = nickname;
+        entity.setNickname(nickname);
     }
 
-    @Size(min = 8, message = "Minimum length is 8 characters")
     public String getPassword() {
-        return password;
+        return entity.getPassword();
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        entity.setPassword(password);
     }
 
-    public String getBirthdate() {
-        return birthdate;
+    public String getBirthday() {
+        return entity.getBirthday();
     }
 
-    public void setBirthdate(String birthdate) {
-        this.birthdate = birthdate;
+    public void setBirthday(String birthday) {
+        entity.setBirthday(birthday);
     }
 
     public Part getPicture() {
@@ -73,31 +66,6 @@ public class RegisterBean implements Serializable {
     }
 
     public void register() {
-        Account account = new Account();
-        account.setId(nickname);
-        account.setPassword(password);
-        account.setName(realName);
-        account.addRole("user");
-
-        String fileName = DataManager.store(picture);
-
-        if (fileName == null) {
-            fileName = "generic.png";
-        }
-
-        account.setProfilePicture(fileName);
-
-        if (birthdate != null) {
-            java.util.Date parsedDate;
-            try {
-                 parsedDate = new SimpleDateFormat("dd/mm/yyyy").parse(birthdate);
-            } catch (ParseException e) {
-                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cannot parse birthdate!", "You given "+birthdate);
-                throw new ValidatorException(message);
-            }
-            account.setBirthday(new Date(parsedDate.getTime()));
-        }
-
-        rs.createRegistration(account);
+        //ar.createAccount(entity, picture);
     }
 }

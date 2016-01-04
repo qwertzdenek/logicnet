@@ -1,15 +1,20 @@
 package pia.data;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.sql.Timestamp;
+import java.util.Set;
 
 @Entity
 @Table(name = "posts")
 public class Post extends BaseEntity<Long> {
     private String content;
-    private Date date;
+    private Account writer;
+    private Timestamp dateTime;
+
+    private Set<Account> likes;
 
     @Id
+    @GeneratedValue
     @Override
     public Long getId() {
         return super.getId();
@@ -29,13 +34,36 @@ public class Post extends BaseEntity<Long> {
         this.content = content;
     }
 
-    @Column(nullable = false)
-    public Date getDate() {
-        return date;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="writer")
+    public Account getWriter() {
+        return writer;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setWriter(Account writtenBy) {
+        this.writer = writtenBy;
+    }
+
+    @Column(nullable = false)
+    public Timestamp getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(Timestamp date) {
+        this.dateTime = date;
+    }
+
+    @ManyToMany(mappedBy = "likedPosts")
+    public Set<Account> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Set<Account> likes) {
+        this.likes = likes;
+    }
+
+    public void addLike(Account account) {
+        this.likes.add(account);
     }
 
     @Override
@@ -46,14 +74,14 @@ public class Post extends BaseEntity<Long> {
         Post post = (Post) o;
 
         if (!content.equals(post.content)) return false;
-        return date.equals(post.date);
+        return dateTime.equals(post.dateTime);
 
     }
 
     @Override
     public int hashCode() {
         int result = content.hashCode();
-        result = 31 * result + date.hashCode();
+        result = 31 * result + dateTime.hashCode();
         return result;
     }
 

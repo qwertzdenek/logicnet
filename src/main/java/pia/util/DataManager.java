@@ -1,15 +1,21 @@
 package pia.util;
 
+import org.apache.cxf.helpers.IOUtils;
+import org.apache.cxf.jaxrs.ext.multipart.Attachment;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
-import javax.servlet.http.Part;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
+
+// TODO: do it as EJB
 
 @WebListener
 public class DataManager implements ServletContextListener {
@@ -32,31 +38,33 @@ public class DataManager implements ServletContextListener {
         context.log("** DataManager closing");
     }
 
-    public static String store(Part file) {
+    public static String store(Attachment file) {
         if (uploadDir == null) {
             throw new IllegalStateException("Context is not initialized yet.");
         }
 
-        String type = file.getContentType();
+        String type = file.getContentType().toString();
         String extension;
-        String subdir;
+        String subdir = "images";
 
         switch (type) {
             case "image/png":
                 extension = ".png";
-                subdir = "images";
                 break;
             case "image/jpeg":
                 extension = ".jpeg";
-                subdir = "images";
                 break;
             default:
                 return null;
         }
         String name = UUID.randomUUID().toString() + extension;
         Path path = Paths.get(uploadDir, subdir, name);
+
         try {
-            file.write(path.toString());
+            InputStream in = file.getDataHandler().getInputStream();
+            FileOutputStream out = new FileOutputStream(path.toFile());
+            IOUtils.copyAndCloseInput(in, out);
+            out.close();
         } catch (IOException e) {
             return null;
         }

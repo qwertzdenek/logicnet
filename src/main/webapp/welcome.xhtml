@@ -31,23 +31,23 @@
                     <h1>Trending Now</h1>
 
                     <c:forEach items="#{trendingService.trending}" var="post">
-                        <mc:post date="#{post.date}" body="#{post.content}" />
+                        <mc:post date="#{post.dateTime}" body="#{post.content}" />
                     </c:forEach>
 
                 </div>
 
                 <div id="register" class="tab-pane fade">
-                    <h:form id="registerForm" method="post" action="register" enctype="multipart/form-data">
-                        <b:text value="#{registerBean.realName}" label="Real name" required="true" autoFocus="true" />
+                    <h:form id="registerForm" method="post" enctype="multipart/form-data">
+                        <b:text id="real_name" value="#{registerBean.realName}" label="Real name" required="true" autoFocus="true" />
 
-                        <b:text value="#{registerBean.nickname}" label="Nickname" required="true">
+                        <b:text id="nickname" value="#{registerBean.nickname}" label="Nickname" required="true">
                             <b:tooltip>
                                 Will be used for login. It must be unique.
                             </b:tooltip>
                             <f:validator binding="#{nicknameValidator}" />
                         </b:text>
 
-                        <b:calendar pickTime="false" value="#{registerBean.birthdate}" label="Birthdate" />
+                        <b:calendar id="birthday" pickTime="false" value="#{registerBean.birthday}" label="Birthdate" />
 
                         <b:section label="Password">
                             <h:inputSecret id="password" value="#{registerBean.password}" label="Password" required="true" />
@@ -55,7 +55,7 @@
                         </b:section>
 
                         <b:section label="Profile picture">
-                            <h:inputFile styleClass="btn btn-default" value="#{registerBean.picture}" required="true" />
+                            <h:inputFile id="profile_picture" styleClass="btn btn-default" value="#{registerBean.picture}" required="true" />
                         </b:section>
 
                         <h:commandButton actionListener="#{registerBean.register}" value="Submit" />
