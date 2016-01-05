@@ -20,8 +20,7 @@ public class SamePasswordValidator implements Validator {
         String password = (String) passwordField.getValue();
         String confirmPassword = (String) value;
         if (!confirmPassword.equals(password)) {
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Passwords do not match!", "Passwords do not match!");
-            throw new ValidatorException(message);
+            throw new ValidatorException(new FacesMessage("Passwords do not match!"));
         }
     }
 }

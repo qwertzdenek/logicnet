@@ -2,15 +2,16 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:b="http://butterfaces.larmic.de/components"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:mc="http://xmlns.jcp.org/jsf/composite/components"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 <ui:composition template="/WEB-INF/templates/view.xhtml">
     <ui:define name="title">welcome to LogicNet</ui:define>
 
     <ui:define name="content">
+
         <div class="jumbotron">
             <div class="container">
                 <h1>Logic Net</h1>
@@ -19,10 +20,12 @@
 
                 <p>
                     <a class="btn btn-primary btn-lg" href="#register" role="button" data-toggle="tab">Register Now</a>
-                    <a class="btn btn-success btn-lg" href="user/stream.xhtml" role="button">Connect</a>
+                    <h:link role="button" class="btn btn-success btn-lg" outcome="success" value="Connect" />
+                    <h:outputLabel value="Welcome back #{sessionScope['lastUser']}!" rendered="#{sessionScope['knownUser']}"/>
                 </p>
             </div>
         </div>
+
 
         <div class="container">
             <div class="tab-content">
@@ -37,28 +40,48 @@
                 </div>
 
                 <div id="register" class="tab-pane fade">
-                    <h:form id="registerForm" method="post" enctype="multipart/form-data">
-                        <b:text id="real_name" value="#{registerBean.realName}" label="Real name" required="true" autoFocus="true" />
+                    <h:form prependId="false" id="registerForm" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <h:outputLabel for="real_name">Real name:</h:outputLabel>
+                            <h:inputText id="real_name" styleClass="form-control" value="#{registerBean.account.real_name}" required="true" a:autofocus="true" />
+                            <span class="help-block"><h:message for="real_name" /></span>
+                        </div>
 
-                        <b:text id="nickname" value="#{registerBean.nickname}" label="Nickname" required="true">
-                            <b:tooltip>
-                                Will be used for login. It must be unique.
-                            </b:tooltip>
-                            <f:validator binding="#{nicknameValidator}" />
-                        </b:text>
+                        <div class="form-group">
+                            <h:outputLabel for="nickname">Nickname:</h:outputLabel>
+                            <h:inputText id="nickname" styleClass="form-control" value="#{registerBean.account.nickname}" required="true">
+                                <f:validator binding="#{nicknameValidator}" />
+                            </h:inputText>
+                            <span class="help-block"><h:message for="nickname" /></span>
+                        </div>
 
-                        <b:calendar id="birthday" pickTime="false" value="#{registerBean.birthday}" label="Birthdate" />
+                        <div class="form-group">
+                            <h:outputLabel for="birthday">Birthday:</h:outputLabel>
+                            <h:inputText a:type="date" id="birthday" class="form-control" value="#{registerBean.account.birthday}" />
+                            <span class="help-block"><h:message for="birthday" /></span>
+                        </div>
 
-                        <b:section label="Password">
-                            <h:inputSecret id="password" value="#{registerBean.password}" label="Password" required="true" />
-                            <h:inputSecret value="" validator="#{samePasswordValidator.validate}" />
-                        </b:section>
 
-                        <b:section label="Profile picture">
-                            <h:inputFile id="profile_picture" styleClass="btn btn-default" value="#{registerBean.picture}" required="true" />
-                        </b:section>
+                        <div class="form-group">
+                            <h:outputLabel for="password">Password:</h:outputLabel>
+                            <h:inputSecret id="password" styleClass="form-control" value="#{registerBean.account.password}" required="true" />
+                            <span class="help-block"><h:message for="password" /></span>
 
-                        <h:commandButton actionListener="#{registerBean.register}" value="Submit" />
+                            <h:outputLabel for="password2">Repeat password</h:outputLabel>
+                            <h:inputSecret id="password2" styleClass="form-control" value="#{registerBean.account.password}" validator="#{samePasswordValidator.validate}" />
+                            <span class="help-block"><h:message for="password2" /></span>
+                        </div>
+
+
+                        <div class="form-group">
+                            <h:outputLabel for="profile_picture">Profile picture:</h:outputLabel>
+                            <h:inputFile id="profile_picture" styleClass="btn btn-default" value="#{registerBean.picture}">
+                                <f:validator binding="#{fileValidator}" />
+                            </h:inputFile>
+                            <span class="help-block"><h:message for="profile_picture" /></span>
+                        </div>
+
+                        <h:commandButton actionListener="#{registerBean.register}" action="#register" styleClass="btn btn-default" value="Submit" />
                     </h:form>
                 </div>
             </div>

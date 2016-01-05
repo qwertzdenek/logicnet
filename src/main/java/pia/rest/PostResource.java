@@ -6,6 +6,7 @@ import pia.dao.PostDao;
 import pia.data.Account;
 import pia.data.Post;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.json.Json;
@@ -31,24 +32,29 @@ public class PostResource {
 
     @Inject
     @JPADAO
-    PostDao pd;
+    private PostDao pd;
 
     @Inject
     @JPADAO
-    AccountDao ad;
+    private AccountDao ad;
 
     @Inject
-    Principal principal;
+    private Principal principal;
 
     public PostResource() {
         jsonFactory = Json.createGeneratorFactory(null);
     }
 
     @POST
+    @RolesAllowed("user")
     public Response addPost(
-            @Pattern(regexp = "[\\w\\s.!]+", message = "This is not valid content.'")
+            /*@Pattern(regexp = "[\\w\\s.!]+", message = "This is not valid content.'")*/
             String content) {
         Account writer = ad.findOne(principal.getName());
+
+        if (writer == null) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
 
         // TODO: escape values
 
@@ -67,9 +73,15 @@ public class PostResource {
     }
 
     @POST
+    @RolesAllowed("user")
     @Path("like/{post_id}")
     public Response likePost(@PathParam("post_id") long postId) {
         Account writer = ad.findOne(principal.getName());
+
+        if (writer == null) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
         Post post = pd.findOne(postId);
 
         if (post == null) {

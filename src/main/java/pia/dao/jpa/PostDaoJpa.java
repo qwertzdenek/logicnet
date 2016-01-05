@@ -22,7 +22,7 @@ public class PostDaoJpa extends GenericDaoJpa<Post, Long> implements PostDao {
 
     @Override
     public List<Post> getMostPopularDay() {
-        TypedQuery<Post> q = em.createQuery("SELECT p FROM Post p WHERE p.dateTime > :dayBefore", Post.class);
+        TypedQuery<Post> q = em.createQuery("SELECT p FROM Post p WHERE p.dateTime > :dayBefore order by p.likeCount ASC", Post.class);
 
         LocalDateTime dt = LocalDateTime.now().minusDays(1);
         q.setParameter("dayBefore", Timestamp.valueOf(dt));

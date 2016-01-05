@@ -1,11 +1,14 @@
 package pia.cdi;
 
-import pia.rest.AccountResource;
+import pia.ServiceResult;
+import pia.beans.RegisterService;
 import pia.rest.entities.AccountEntity;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
-import javax.inject.Inject;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.servlet.http.Part;
 import java.io.Serializable;
@@ -13,48 +16,19 @@ import java.io.Serializable;
 @Named
 @SessionScoped
 public class RegisterBean implements Serializable {
-    @Inject
-    AccountResource ar;
+    @EJB
+    private RegisterService rs;
 
-    AccountEntity entity;
+    private AccountEntity account;
+    private Part picture;
+
+    public AccountEntity getAccount() {
+        return account;
+    }
 
     @PostConstruct
     private void init() {
-        entity = new AccountEntity();
-    }
-
-    private Part picture;
-
-    public String getRealName() {
-        return entity.getReal_name();
-    }
-
-    public void setRealName(String realName) {
-        entity.setReal_name(realName);
-    }
-
-    public String getNickname() {
-        return entity.getNickname();
-    }
-
-    public void setNickname(String nickname) {
-        entity.setNickname(nickname);
-    }
-
-    public String getPassword() {
-        return entity.getPassword();
-    }
-
-    public void setPassword(String password) {
-        entity.setPassword(password);
-    }
-
-    public String getBirthday() {
-        return entity.getBirthday();
-    }
-
-    public void setBirthday(String birthday) {
-        entity.setBirthday(birthday);
+        account = new AccountEntity();
     }
 
     public Part getPicture() {
@@ -65,7 +39,12 @@ public class RegisterBean implements Serializable {
         this.picture = picture;
     }
 
-    public void register() {
-        //ar.createAccount(entity, picture);
+    public void register(ActionEvent e) {
+        System.out.println(account);
+
+        ServiceResult res = rs.register(account, picture);
+        if (!res.getSuccess()) {
+            throw new AbortProcessingException(res.getMessage());
+        }
     }
 }

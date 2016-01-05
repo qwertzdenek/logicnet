@@ -78,7 +78,7 @@ public class Account extends BaseEntity<String> {
         this.roles.add(role);
     }
 
-    @OneToMany(mappedBy = "writer")
+    @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY)
     public Set<Post> getPosts() {
         return posts;
     }

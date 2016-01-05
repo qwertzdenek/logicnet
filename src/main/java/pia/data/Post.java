@@ -12,6 +12,7 @@ public class Post extends BaseEntity<Long> {
     private Timestamp dateTime;
 
     private Set<Account> likes;
+    private int likeCount = 0;
 
     @Id
     @GeneratedValue
@@ -64,6 +65,16 @@ public class Post extends BaseEntity<Long> {
 
     public void addLike(Account account) {
         this.likes.add(account);
+        this.likeCount++;
+    }
+
+    @Column(nullable = false)
+    public int getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(int likeCount) {
+        this.likeCount = likeCount;
     }
 
     @Override

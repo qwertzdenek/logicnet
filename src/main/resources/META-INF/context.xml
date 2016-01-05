@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<Context>
-<Realm className="org.apache.catalina.realm.JDBCRealm"
-       driverName="org.mariadb.jdbc.Driver"
-       connectionURL="jdbc:mysql://localhost/pia?user=pia&amp;password=sp"
-       userTable="accounts" userNameCol="account_id" userCredCol="password"
-       userRoleTable="account_roles" roleNameCol="role"/>
-</Context>

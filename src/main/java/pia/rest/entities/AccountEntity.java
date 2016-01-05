@@ -47,7 +47,7 @@ public class AccountEntity {
         this.password = password;
     }
 
-    @Pattern(regexp = "\\d{1,2}/\\d{1,2}/\\d{4}")
+    @Pattern(regexp = "\\d{4}-\\d{1,2}-\\d{1,2}", message = "Format is yyyy-MM-dd.")
     public String getBirthday() {
         return birthday;
     }

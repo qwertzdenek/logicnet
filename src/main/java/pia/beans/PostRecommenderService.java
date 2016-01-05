@@ -22,7 +22,6 @@ public class PostRecommenderService implements Serializable {
     PostDao pd;
 
     public List<Post> getRecommended() {
-        // TODO: cache it
         return pd.getMostPopularDay();
     }
 }
