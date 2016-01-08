@@ -20,21 +20,27 @@
 
                 <p>
                     <a class="btn btn-primary btn-lg" href="#register" role="button" data-toggle="tab">Register Now</a>
-                    <h:link role="button" class="btn btn-success btn-lg" outcome="success" value="Connect" />
+                    <h:link role="button" class="btn btn-success btn-lg" outcome="connect" value="Connect" />
                     <h:outputLabel value="Welcome back #{sessionScope['lastUser']}!" rendered="#{sessionScope['knownUser']}"/>
                 </p>
             </div>
         </div>
 
-
         <div class="container">
+            <mc:bs-message/>
+
             <div class="tab-content">
                 <div id="spotlight" class="tab-pane fade in active">
 
                     <h1>Trending Now</h1>
 
                     <c:forEach items="#{trendingService.trending}" var="post">
-                        <mc:post date="#{post.dateTime}" body="#{post.content}" />
+                        <c:set value="#{post.dateTime}" var="formattedDate">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </c:set>
+
+                        <mc:post date="#{formattedDate}" body="#{post.content}" postId="#{post.id}"
+                                 likes="#{post.likeCount}" nickname="#{post.writer.id}"/>
                     </c:forEach>
 
                 </div>
@@ -42,13 +48,13 @@
                 <div id="register" class="tab-pane fade">
                     <h:form prependId="false" id="registerForm" method="post" enctype="multipart/form-data">
                         <div class="form-group">
-                            <h:outputLabel for="real_name">Real name:</h:outputLabel>
+                            <h:outputLabel for="real_name" value="Real name:"/>
                             <h:inputText id="real_name" styleClass="form-control" value="#{registerBean.account.real_name}" required="true" a:autofocus="true" />
                             <span class="help-block"><h:message for="real_name" /></span>
                         </div>
 
                         <div class="form-group">
-                            <h:outputLabel for="nickname">Nickname:</h:outputLabel>
+                            <h:outputLabel for="nickname" value="Nickname:"/>
                             <h:inputText id="nickname" styleClass="form-control" value="#{registerBean.account.nickname}" required="true">
                                 <f:validator binding="#{nicknameValidator}" />
                             </h:inputText>
@@ -56,32 +62,36 @@
                         </div>
 
                         <div class="form-group">
-                            <h:outputLabel for="birthday">Birthday:</h:outputLabel>
+                            <h:outputLabel for="birthday" value="Birthday:"/>
                             <h:inputText a:type="date" id="birthday" class="form-control" value="#{registerBean.account.birthday}" />
                             <span class="help-block"><h:message for="birthday" /></span>
                         </div>
 
-
                         <div class="form-group">
-                            <h:outputLabel for="password">Password:</h:outputLabel>
+                            <h:outputLabel for="password" value="Password:" />
                             <h:inputSecret id="password" styleClass="form-control" value="#{registerBean.account.password}" required="true" />
                             <span class="help-block"><h:message for="password" /></span>
 
-                            <h:outputLabel for="password2">Repeat password</h:outputLabel>
+                            <h:outputLabel for="password2" value="Repeat password:" />
                             <h:inputSecret id="password2" styleClass="form-control" value="#{registerBean.account.password}" validator="#{samePasswordValidator.validate}" />
                             <span class="help-block"><h:message for="password2" /></span>
                         </div>
 
-
                         <div class="form-group">
-                            <h:outputLabel for="profile_picture">Profile picture:</h:outputLabel>
+                            <h:outputLabel for="profile_picture" value="Profile picture:" />
                             <h:inputFile id="profile_picture" styleClass="btn btn-default" value="#{registerBean.picture}">
                                 <f:validator binding="#{fileValidator}" />
                             </h:inputFile>
                             <span class="help-block"><h:message for="profile_picture" /></span>
                         </div>
 
-                        <h:commandButton actionListener="#{registerBean.register}" action="#register" styleClass="btn btn-default" value="Submit" />
+                        <h:outputLabel for="agree" value="Do you agree with my conditions?" />
+                        <h:selectBooleanCheckbox id="agree">
+                            <f:validator binding="#{conditionsValidator}" />
+                        </h:selectBooleanCheckbox>
+                        <span class="help-block"><h:message for="agree" /></span>
+
+                        <h:commandButton actionListener="#{registerBean.register}" action="#{registerBean.action}" styleClass="btn btn-default" value="Submit" />
                     </h:form>
                 </div>
             </div>

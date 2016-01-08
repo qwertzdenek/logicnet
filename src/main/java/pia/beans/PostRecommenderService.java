@@ -4,6 +4,7 @@ import pia.dao.JPADAO;
 import pia.dao.PostDao;
 import pia.data.Post;
 
+import javax.ejb.Stateful;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -12,7 +13,7 @@ import java.security.Principal;
 import java.util.List;
 
 @Named
-@Stateless
+@Stateful
 public class PostRecommenderService implements Serializable {
     @Inject
     Principal principal;

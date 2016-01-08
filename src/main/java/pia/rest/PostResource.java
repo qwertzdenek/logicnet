@@ -12,8 +12,10 @@ import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonGeneratorFactory;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Pattern;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.StringWriter;
@@ -38,9 +40,6 @@ public class PostResource {
     @JPADAO
     private AccountDao ad;
 
-    @Inject
-    private Principal principal;
-
     public PostResource() {
         jsonFactory = Json.createGeneratorFactory(null);
     }
@@ -48,15 +47,10 @@ public class PostResource {
     @POST
     @RolesAllowed("user")
     public Response addPost(
+            @Context HttpServletRequest req,
             /*@Pattern(regexp = "[\\w\\s.!]+", message = "This is not valid content.'")*/
             String content) {
-        Account writer = ad.findOne(principal.getName());
-
-        if (writer == null) {
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
-
-        // TODO: escape values
+        Account writer = ad.findOne(req.getUserPrincipal().getName());
 
         Post post = new Post();
         post.setContent(content);
@@ -75,24 +69,19 @@ public class PostResource {
     @POST
     @RolesAllowed("user")
     @Path("like/{post_id}")
-    public Response likePost(@PathParam("post_id") long postId) {
-        Account writer = ad.findOne(principal.getName());
-
-        if (writer == null) {
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
+    public Response likePost(
+            @Context HttpServletRequest req,
+            @PathParam("post_id") long postId) {
+        Account writer = ad.findOne(req.getUserPrincipal().getName());
 
         Post post = pd.findOne(postId);
-
         if (post == null) {
-            return Response.noContent().entity("{'message': 'post don\'t exist'}").build();
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("{'message': 'post don\'t exist'}").build();
         }
 
         post.addLike(writer);
-        writer.addLike(post);
-
         pd.save(post);
-        ad.save(writer);
 
         return Response.accepted().build();
     }
@@ -103,7 +92,6 @@ public class PostResource {
             @PathParam("nickname")
             @Pattern(regexp = "[a-zA-Z]+", message = "This is not valid nickname")
             String nickname) {
-
         Account account = ad.findOne(nickname);
 
         if (account == null) {

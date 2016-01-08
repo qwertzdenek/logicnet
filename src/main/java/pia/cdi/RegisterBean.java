@@ -7,6 +7,8 @@ import pia.rest.entities.AccountEntity;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
@@ -46,5 +48,11 @@ public class RegisterBean implements Serializable {
         if (!res.getSuccess()) {
             throw new AbortProcessingException(res.getMessage());
         }
+    }
+
+    public void action() {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        fc.addMessage("registerForm", new FacesMessage(FacesMessage.SEVERITY_INFO,"You have been registered!","You have been registered!"));
+        fc.getExternalContext().getFlash().setKeepMessages(true);
     }
 }

@@ -1,5 +1,7 @@
 package pia.data;
 
+import org.hibernate.annotations.BatchSize;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Set;

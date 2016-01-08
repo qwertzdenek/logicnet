@@ -5,9 +5,15 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:mc="http://xmlns.jcp.org/jsf/composite/components"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
->
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 <ui:composition template="/WEB-INF/templates/view-full.xhtml">
+    <ui:define name="metadata">
+        <f:metadata>
+            <f:viewParam name="page" value="#{streamBean.page}" required="false"/>
+            <f:viewParam name="topic" value="#{streamBean.topic}" required="false"/>
+        </f:metadata>
+    </ui:define>
+
     <ui:define name="title">LogicNet public stream</ui:define>
 
     <ui:define name="header">
@@ -58,7 +64,7 @@
     </ui:define>
 
     <ui:define name="content">
-        <div class="container">
+
             <div class="page-header">
                 <div class="input-group col-md-12">
                     <input id="post-input" type="text" class="search-query form-control" placeholder="Share something interesting."/>
@@ -70,32 +76,44 @@
                 </div>
             </div>
 
-            <div id="messages" class="alert alert-success" role="alert"></div>
+            <mc:bs-message/>
+
+            <div id="messages" class="alert alert-success" role="alert" style="display: none"></div>
 
             <div class="row">
                 <div class="col-md-6">
                     <h2>Now on the Net</h2>
 
-                    <c:forEach items="#{postRecommenderService.recommended}" var="post">
+                    <c:if test="#{empty streamBean.recomendation}">
+                        <blockquote>
+                            <p>I love to talk about nothing. It's the only thing I know anything about.</p>
+                            <footer>Oscar Wilde</footer>
+                        </blockquote>
+                    </c:if>
+
+                    <c:forEach items="#{streamBean.recomendation}" var="post">
                         <c:set value="#{post.dateTime}" var="formattedDate">
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </c:set>
 
-                        <mc:post date="#{formattedDate}" body="#{post.content}" />
+                        <mc:post type="FULL" postId="#{post.id}" date="#{formattedDate}" body="#{post.content}"
+                                 nickname="#{post.writer.id}" likes="#{post.likeCount}"/>
                     </c:forEach>
+                    
+                    <mc:pager page="#{streamBean.page}" firstPage="#{streamBean.page==0}"
+                              lastPage="#{streamBean.lastPage}"/>
 
                 </div>
                 <div class="col-md-6">
                     <h2>My topic cloud</h2>
                 </div>
             </div>
-        </div><!-- /.container -->
     </ui:define>
 
     <ui:define name="footer">
         <footer class="footer">
             <div class="container">
-                <p class="text-muted">Copyleft by Zdeněk Janeček.</p>
+                <p class="text-muted">Copyleft 2016 Zdeněk Janeček.</p>
             </div>
         </footer>
     </ui:define>

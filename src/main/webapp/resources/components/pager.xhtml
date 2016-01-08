@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+<cc:interface>
+    <cc:attribute name="firstPage" />
+    <cc:attribute name="lastPage" />
+    <cc:attribute name="page" required="true"/>
+</cc:interface>
+
+<cc:implementation>
+    <c:set value="#{cc.attrs.page-1}" var="previousPage"/>
+    <c:set value="#{cc.attrs.page+1}" var="nextPage"/>
+
+    <nav>
+        <ul class="pager">
+            <c:if test="#{cc.attrs.firstPage}">
+                <li class="disabled"><a href="#">Previous</a></li>
+            </c:if>
+            <c:if test="#{not cc.attrs.firstPage}">
+                <li>
+                    <h:link value="Previous">
+                        <f:param name="page" value="#{previousPage}"/>
+                    </h:link>
+                </li>
+            </c:if>
+
+            <c:if test="#{cc.attrs.lastPage}">
+                <li class="disabled"><a href="#">Next</a></li>
+            </c:if>
+            <c:if test="#{not cc.attrs.lastPage}">
+                <li>
+                    <h:link value="Next">
+                        <f:param name="page" value="#{nextPage}"/>
+                    </h:link>
+                </li>
+            </c:if>
+        </ul>
+    </nav>
+</cc:implementation>
+
+</html>

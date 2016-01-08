@@ -7,8 +7,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 @ApplicationPath("api")
-public class ApplicationConfig extends Application {
+public class LogicnetApplication extends Application {
     public Set<Class<?>> getClasses() {
-        return new HashSet<Class<?>>(Arrays.asList(PostResource.class, AccountResource.class, MaintenanceResource.class));
+        return new HashSet<Class<?>>(Arrays.asList(PostResource.class, AccountResource.class));
     }
 }

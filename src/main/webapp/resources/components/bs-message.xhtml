@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+<cc:interface>
+</cc:interface>
+
+<cc:implementation>
+    <c:forEach items="#{facesContext.messageList}" var="msg">
+        <c:if test="#{msg.severity.ordinal == 0}">
+            <div class="alert alert-success" role="alert">
+                <h:outputText value="#{msg.summary}"/>
+            </div>
+        </c:if>
+        <c:if test="#{msg.severity.ordinal == 1}">
+            <div class="alert alert-info" role="alert">
+                <h:outputText value="#{msg.summary}"/>
+            </div>
+        </c:if>
+        <c:if test="#{msg.severity.ordinal == 2}">
+            <div class="alert alert-warning" role="alert">
+                <h:outputText value="#{msg.summary}"/>
+            </div>
+        </c:if>
+        <c:if test="#{msg.severity.ordinal == 3}">
+            <div class="alert alert-danger" role="alert">
+                <h:outputText value="#{msg.summary}"/>
+            </div>
+        </c:if>
+    </c:forEach>
+</cc:implementation>
+</html>

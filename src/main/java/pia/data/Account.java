@@ -1,7 +1,9 @@
 package pia.data;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "accounts")
@@ -14,6 +16,8 @@ public class Account extends BaseEntity<String> {
     private Set<String> roles = new LinkedHashSet<>();
     private Set<Post> posts = new LinkedHashSet<>();
     private Set<Post> likedPosts = new LinkedHashSet<>();
+    private Set<Account> friends = new LinkedHashSet<>();
+    private Set<Account> friendRequests = new LinkedHashSet<>();
 
     @Id
     @Column(name = "account_id")
@@ -64,8 +68,8 @@ public class Account extends BaseEntity<String> {
     }
 
     @ElementCollection
-    @CollectionTable(name="account_roles", joinColumns=@JoinColumn(name="account_id"))
-    @Column(name="role")
+    @CollectionTable(name = "account_roles", joinColumns = @JoinColumn(name = "account_id"))
+    @Column(name = "role")
     public Set<String> getRoles() {
         return roles;
     }
@@ -78,7 +82,7 @@ public class Account extends BaseEntity<String> {
         this.roles.add(role);
     }
 
-    @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     public Set<Post> getPosts() {
         return posts;
     }
@@ -87,7 +91,9 @@ public class Account extends BaseEntity<String> {
         this.posts = posts;
     }
 
-    public void addPost(Post post) { this.posts.add(post); }
+    public void addPost(Post post) {
+        this.posts.add(post);
+    }
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -102,7 +108,43 @@ public class Account extends BaseEntity<String> {
         this.likedPosts = likedPosts;
     }
 
-    public void addLike(Post post) { this.likedPosts.add(post); }
+    public void addLike(Post post) {
+        this.likedPosts.add(post);
+    }
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "friends_list",
+            joinColumns = @JoinColumn(name = "account_one", referencedColumnName = "account_id"),
+            inverseJoinColumns = @JoinColumn(name = "account_two", referencedColumnName = "account_id"))
+    public Set<Account> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(Set<Account> friends) {
+        this.friends = friends;
+    }
+
+    public void addFriend(Account a) {
+        this.friends.add(a);
+    }
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "friend_requests",
+            joinColumns = @JoinColumn(name = "account_one", referencedColumnName = "account_id"),
+            inverseJoinColumns = @JoinColumn(name = "account_two", referencedColumnName = "account_id"))
+    public Set<Account> getFriendRequests() {
+        return friendRequests;
+    }
+
+    public void setFriendRequests(Set<Account> friendRequests) {
+        this.friendRequests = friendRequests;
+    }
+
+    public void addFriendRequest(Account a) {
+        this.friendRequests.add(a);
+    }
 
     @Override
     public String toString() {

@@ -2,12 +2,16 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:cc="http://xmlns.jcp.org/jsf/composite"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:h="http://java.sun.com/jsf/html">
 
 <cc:interface>
     <cc:attribute name="body" required="true"/>
     <cc:attribute name="date" required="true"/>
-    <cc:attribute name="type" default="PLAIN"/>
+    <cc:attribute name="nickname" required="true"/>
+    <cc:attribute name="likes" required="true"/>
+    <cc:attribute name="postId" required="true"/>
+    <cc:attribute name="type" default="PLAIN" required="false"/>
 </cc:interface>
 
 <cc:implementation>
@@ -21,33 +25,43 @@
     </c:choose>
     <div class="panel #{panelType}">
         <div class="panel-body">
-            #{cc.attrs.body}
+            <h:outputLabel value="#{cc.attrs.body}" />
         </div>
 
         <div class="panel-footer">
-            <p>Published on #{cc.attrs.date}.</p>
+            <div class="row">
+                <p class="text-left">Published on <em><h:outputText value="#{cc.attrs.date}"/></em>.</p>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <span class="glyphicon glyphicon-heart-empty" aria-hidden="true"/>
+                    <h:outputText value="#{cc.attrs.likes}"/>
+                </div>
+                <div class="col-md-4 col-md-offset-4">
+                    <h:outputText value="by @#{cc.attrs.nickname}"/>
+                </div>
+            </div>
 
             <c:choose>
                 <c:when test="#{cc.attrs.type == 'BASIC'}">
-                    <button class="btn btn-success" type="button">
+                    <button class="btn btn-success" type="button" data-target="#{cc.attrs.postId}">
                         <span class="glyphicon glyphicon-heart" />
                     </button>
                 </c:when>
                 <c:when test="#{cc.attrs.type == 'FULL'}">
                     <div class="btn-group">
-                        <button class="btn btn-primary" type="button">
+                        <button class="btn btn-primary like-button" type="button" data-target="#{cc.attrs.nickname}">
                             <span class="glyphicon glyphicon-user" />
                         </button>
-                        <button class="btn btn-danger" type="button">
+                        <button class="btn btn-danger hide-button" type="button" data-target="#{cc.attrs.postId}">
                             <span class="glyphicon glyphicon-trash" />
                         </button>
-                        <button class="btn btn-success" type="button">
+                        <button class="btn btn-success like-button" type="button" data-target="#{cc.attrs.postId}">
                             <span class="glyphicon glyphicon-heart" />
                         </button>
                     </div>
                 </c:when>
             </c:choose>
-
         </div>
     </div>
 </cc:implementation>

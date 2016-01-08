@@ -40,7 +40,6 @@ public class TrendingService {
         b.setId(10L);
         b.setContent("Duis ac metus ut neque pretium imperdiet. Quisque fringilla nulla erat, at vehicula ipsum auctor ac. Proin eu tristique nunc. Donec tempor in velit gravida mollis. Duis congue iaculis velit finibus faucibus. Duis lorem massa, luctus in metus sit amet, rhoncus interdum arcu. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;");
         b.setDateTime(Timestamp.from(Instant.now().minusMillis(1000L*60L*60L*4)));
-
         trending.add(b);
     }
 }
