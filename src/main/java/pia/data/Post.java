@@ -12,9 +12,8 @@ public class Post extends BaseEntity<Long> {
     private String content;
     private Account writer;
     private Timestamp dateTime;
-
     private Set<Account> likes;
-    private int likeCount = 0;
+    private int likesCount;
 
     @Id
     @GeneratedValue
@@ -65,18 +64,13 @@ public class Post extends BaseEntity<Long> {
         this.likes = likes;
     }
 
-    public void addLike(Account account) {
-        this.likes.add(account);
-        this.likeCount++;
-    }
-
     @Column(nullable = false)
-    public int getLikeCount() {
-        return likeCount;
+    public int getLikesCount() {
+        return likesCount;
     }
 
-    public void setLikeCount(int likeCount) {
-        this.likeCount = likeCount;
+    public void setLikesCount(int likesCount) {
+        this.likesCount = likesCount;
     }
 
     @Override
@@ -86,9 +80,7 @@ public class Post extends BaseEntity<Long> {
 
         Post post = (Post) o;
 
-        if (!content.equals(post.content)) return false;
-        return dateTime.equals(post.dateTime);
-
+        return content.equals(post.content) && dateTime.equals(post.dateTime);
     }
 
     @Override

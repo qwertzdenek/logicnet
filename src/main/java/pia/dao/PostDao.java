@@ -14,5 +14,7 @@ import java.util.List;
  */
 public interface PostDao extends GenericDao<Post, Long> {
     List<Post> getMostPopularDay();
+    List<Post> getLastPosts();
     List<Post> getLatestFrom(Account account);
+    int addLike(Post post, Account who);
 }

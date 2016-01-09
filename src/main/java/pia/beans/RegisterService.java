@@ -19,7 +19,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.sql.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -40,7 +40,7 @@ public class RegisterService implements Serializable {
         // Birthday
         Date parsedDate;
         try {
-            parsedDate = new SimpleDateFormat("yyyy-MM-dd").parse(account.getBirthday());
+            parsedDate = new Date(new SimpleDateFormat("yyyy-MM-dd").parse(account.getBirthday()).getTime());
         } catch (ParseException e) {
             return new ServiceResult("Birthday cannot be parsed. Format is yyyy-MM-dd.", false);
         }
@@ -55,7 +55,9 @@ public class RegisterService implements Serializable {
 
         newAccount.setRoles(roles);
         newAccount.setLikedPosts(new LinkedHashSet<>());
-        newAccount.setPosts(new LinkedHashSet<>());
+        newAccount.setPostHides(new LinkedHashSet<>());
+        newAccount.setFriends(new LinkedHashSet<>());
+        newAccount.setFriendRequests(new LinkedHashSet<>());
 
         String plainPassword = account.getPassword();
         String digestedPassword;

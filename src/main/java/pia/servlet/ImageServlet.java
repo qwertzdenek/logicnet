@@ -33,23 +33,22 @@ public class ImageServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String filename = req.getPathInfo().substring(1);
+
+        if (!imageService.exists(filename)) {
+            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
         if (principal == null) {
             resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        } else {
-            Account account = ad.findOne(principal.getName());
-            assert account != null;
-            String filename = req.getPathInfo().substring(1);
-
-            // TODO: or if I am his friend
-            if (account.getProfilePicture().equals(filename)) {
-                File file = imageService.getPath(filename).toFile();
-                resp.setContentType(context.getMimeType(filename));
-                resp.setContentLength((int) file.length());
-                resp.setHeader("Content-Disposition", "inline; filename=\"" + filename + "\"");
-                Files.copy(file.toPath(), resp.getOutputStream());
-            } else {
-                resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            }
+            return;
         }
+
+        File file = imageService.getPath(filename).toFile();
+        resp.setContentType(context.getMimeType(filename));
+        resp.setContentLength((int) file.length());
+        resp.setHeader("Content-Disposition", "inline; filename=\"" + filename + "\"");
+        Files.copy(file.toPath(), resp.getOutputStream());
     }
 }

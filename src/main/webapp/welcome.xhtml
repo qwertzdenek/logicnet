@@ -40,7 +40,7 @@
                         </c:set>
 
                         <mc:post date="#{formattedDate}" body="#{post.content}" postId="#{post.id}"
-                                 likes="#{post.likeCount}" nickname="#{post.writer.id}"/>
+                                 likes="#{post.likesCount}" nickname="#{post.writer.id}"/>
                     </c:forEach>
 
                 </div>
@@ -90,6 +90,8 @@
                             <f:validator binding="#{conditionsValidator}" />
                         </h:selectBooleanCheckbox>
                         <span class="help-block"><h:message for="agree" /></span>
+
+                        <!-- TODO: captcha -->
 
                         <h:commandButton actionListener="#{registerBean.register}" action="#{registerBean.action}" styleClass="btn btn-default" value="Submit" />
                     </h:form>

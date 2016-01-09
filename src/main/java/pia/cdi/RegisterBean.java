@@ -42,8 +42,6 @@ public class RegisterBean implements Serializable {
     }
 
     public void register(ActionEvent e) {
-        System.out.println(account);
-
         ServiceResult res = rs.register(account, picture);
         if (!res.getSuccess()) {
             throw new AbortProcessingException(res.getMessage());

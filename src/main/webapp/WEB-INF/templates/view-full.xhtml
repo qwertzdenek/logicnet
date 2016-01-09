@@ -5,32 +5,32 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>
-        <ui:insert name="title">LogicNet social network</ui:insert>
-    </title>
+<f:view contentType="text/html">
+    <ui:insert name="metadata"/>
+    <h:head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>
+            <ui:insert name="title">LogicNet social network</ui:insert>
+        </title>
 
-    <link href="/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="/css/jqcloud.css" rel="stylesheet" />
-    <link href="/css/style.css" rel="stylesheet" />
-</head>
-<body>
-    <f:view>
-        <ui:insert name="metadata" />
+        <link href="/css/bootstrap.min.css" rel="stylesheet"/>
+        <link href="/css/jqcloud.css" rel="stylesheet"/>
+        <link href="/css/style.css" rel="stylesheet"/>
+    </h:head>
+    <h:body>
         <ui:insert name="header"/>
         <div class="container">
             <ui:insert name="content"/>
         </div>
         <ui:insert name="footer"/>
-    </f:view>
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="/js/bootstrap.js"></script>
-    <script src="/js/jqcloud-1.0.4.min.js"></script>
-    <script src="/js/control.js"></script>
-</body>
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="/js/bootstrap.js"></script>
+        <script src="/js/jqcloud-1.0.4.min.js"></script>
+        <script src="/js/control.js"></script>
+    </h:body>
+</f:view>
 </html>

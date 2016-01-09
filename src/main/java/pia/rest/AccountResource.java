@@ -2,24 +2,23 @@ package pia.rest;
 
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.jaxrs.ext.multipart.Multipart;
-import org.apache.openejb.spi.CallerPrincipal;
+import pia.ServiceResult;
 import pia.beans.RegisterService;
 import pia.dao.AccountDao;
 import pia.dao.JPADAO;
 import pia.data.Account;
 import pia.rest.entities.AccountEntity;
-import pia.ServiceResult;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
-import javax.ejb.Singleton;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonGeneratorFactory;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import javax.validation.constraints.Pattern;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -27,13 +26,16 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringWriter;
-import java.security.Principal;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.sql.Date;
 import java.util.List;
 
 @Path("account")
 @Produces(MediaType.APPLICATION_JSON)
-@Singleton
+@Stateless
 public class AccountResource implements Serializable {
     private JsonGeneratorFactory jsonFactory;
 
@@ -50,6 +52,20 @@ public class AccountResource implements Serializable {
 
     @GET
     @RolesAllowed("user")
+    @Produces("text/plain")
+    @Path("logout")
+    public Response logout(@Context HttpServletRequest req) {
+        try {
+            req.logout();
+        } catch (ServletException e) {
+            return Response.status(Response.Status.NOT_ACCEPTABLE).entity(e.getMessage()).build();
+        }
+        return Response.ok().entity("You have been successfully logged out.").build();
+    }
+
+    @GET
+    @RolesAllowed("user")
+    @Path("list")
     public Response getAccounts() {
         StringWriter sw = new StringWriter();
         JsonGenerator gen = jsonFactory.createGenerator(sw);
@@ -66,7 +82,15 @@ public class AccountResource implements Serializable {
             gen.write("nickname", a.getId());
             gen.write("real_name", a.getName());
             gen.write("profile", "/images/"+a.getProfilePicture());
-            gen.write("birthday", new SimpleDateFormat("dd/MM/yyyy").format(a.getBirthday()));
+
+            Date birhday = a.getBirthday();
+            gen.write("birthday", new SimpleDateFormat("dd/MM/yyyy").format(birhday));
+
+            LocalDate birthday = birhday.toLocalDate();
+            LocalDate today = LocalDate.now(ZoneId.of("Europe/Prague"));
+            long age = ChronoUnit.YEARS.between(birthday, today);
+            gen.write("age", age);
+
             gen.write("likes", a.getLikedPosts().size());
             gen.write("posts", a.getPosts().size());
             gen.writeEnd();
@@ -87,16 +111,8 @@ public class AccountResource implements Serializable {
 
     @GET
     @RolesAllowed("user")
-    @Path("{nickname}")
-    public Response getAccount(
-            @PathParam("nickname")
-            @Pattern(regexp = "\\w+", message = "This is not valid nickname.'")
-            String id) {
-        Account a = ad.findOne(id);
-        if (a == null) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity("{'message': 'account don\'t exist'}").build();
-        }
+    public Response getAccount(@Context HttpServletRequest req) {
+        Account a = ad.findOne(req.getUserPrincipal().getName());
 
         StringWriter sw = new StringWriter();
         JsonGenerator gen = jsonFactory.createGenerator(sw);
@@ -105,9 +121,33 @@ public class AccountResource implements Serializable {
         gen.write("nickname", a.getId());
         gen.write("real_name", a.getName());
         gen.write("profile", "/images/"+a.getProfilePicture());
-        gen.write("birthday", new SimpleDateFormat("dd/MM/yyyy").format(a.getBirthday()));
+
+        Date birhday = a.getBirthday();
+        gen.write("birthday", new SimpleDateFormat("dd/MM/yyyy").format(birhday));
+
+        LocalDate birthday = birhday.toLocalDate();
+        LocalDate today = LocalDate.now(ZoneId.of("Europe/Prague"));
+        long age = ChronoUnit.YEARS.between(birthday, today);
+        gen.write("age", age);
+
         gen.write("likes", a.getLikedPosts().size());
         gen.write("posts", a.getPosts().size());
+        gen.writeStartArray("friend_requests");
+        for (Account fr : a.getIncomingFriendRequests()) {
+            gen.writeStartObject();
+            gen.write("nickname", fr.getId());
+            gen.write("real_name", fr.getName());
+            gen.writeEnd();
+        }
+        gen.writeEnd();
+        gen.writeStartArray("friends");
+        for (Account fr : a.reflexiveFriends()) {
+            gen.writeStartObject();
+            gen.write("nickname", fr.getId());
+            gen.write("real_name", fr.getName());
+            gen.writeEnd();
+        }
+        gen.writeEnd();
         gen.writeEnd();
 
         gen.close();
@@ -151,17 +191,16 @@ public class AccountResource implements Serializable {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        if (account.getFriends().contains(target) || account.getFriendRequests().contains(target)) {
+        if (account.reflexiveFriends().contains(target) || account.getFriendRequests().contains(target)) {
             return Response.status(Response.Status.NOT_MODIFIED).build();
         }
 
         if (target.equals(account)) {
-            return Response.status(Response.Status.CONFLICT)
-                    .entity("{'message': 'You can\'t like yourself!'}").build();
+            return Response.status(Response.Status.CONFLICT).build();
         }
 
-        account.addFriendRequest(target);
-        ad.save(account);
+        account.getFriendRequests().add(target);
+        ad.save(target);
 
         return Response.ok().build();
     }
@@ -180,17 +219,20 @@ public class AccountResource implements Serializable {
         }
 
         // we can't add someone who haven't requested us
-        if (!account.getFriendRequests().contains(target)) {
+        if (!account.getIncomingFriendRequests().contains(target)) {
             return Response.status(Response.Status.NOT_ACCEPTABLE).build();
         }
 
         // we are already friends
-        if (account.getFriends().contains(target)) {
+        if (account.reflexiveFriends().contains(target)) {
             return Response.status(Response.Status.NOT_MODIFIED).build();
         }
 
-        account.addFriend(target);
+        target.getFriendRequests().remove(account);
+        account.getFriends().add(target);
+        target.getFriends().add(account);
         ad.save(account);
+        ad.save(target);
 
         return Response.ok().build();
     }

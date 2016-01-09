@@ -3,40 +3,40 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html"
       xmlns:mc="http://xmlns.jcp.org/jsf/composite/components"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:h="http://java.sun.com/jsf/html">
 <ui:composition template="/WEB-INF/templates/view-full.xhtml">
     <ui:define name="metadata">
         <f:metadata>
-            <f:viewParam name="page" value="#{streamBean.page}" required="false"/>
-            <f:viewParam name="topic" value="#{streamBean.topic}" required="false"/>
+            <f:viewParam name="page" value="#{streamModel.page}" required="false" />
+            <f:event type="preRenderView" listener="#{streamController.update}" />
         </f:metadata>
     </ui:define>
 
     <ui:define name="title">LogicNet public stream</ui:define>
 
     <ui:define name="header">
-        <c:set scope="session" value="#{userSession.username}" var="lastUser" />
+        <c:set scope="session" value="#{userController.username}" var="lastUser" />
         <c:set scope="session" value="true" var="knownUser" />
 
-        <!--<div id="logout-modal" class="modal fade" tabindex="-1" role="dialog">
+        <div id="logout-modal" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">x</button>
-                        <h4 class="modal-title">Dear #{userSession.username}, do you really want to logout?</h4>
+                        <h4 class="modal-title">Dear #{userController.username}, do you really want to logout?</h4>
                     </div>
                     <div class="modal-body">
-                        <p>Do you want to logout?</p>
+                        <p>Your session will be lost.</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <h:commandButton class="btn btn-default" value="Logout" action="#{userSession.logout}"/>
+                        <a href="/logout"><button type="button" class="btn btn-primary">logout</button></a>
                     </div>
                 </div>
             </div>
-        </div>-->
+        </div>
 
         <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
             <div class="container-fluid">
@@ -55,8 +55,10 @@
                 </div>
                 <div id="navbar" class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="bg-success" ><h:form><h:commandLink value="Logout" action="#{userSession.logout}"/></h:form></li>
-                        <li class="bg-success"><a href="#">#{userSession.username}</a></li>
+                        <li class="bg-success">
+                            <a href="#" data-toggle="modal" data-target="#logout-modal">logout</a>
+                        </li>
+                        <li class="bg-success"><h:link value="#{userController.username}" outcome="private"/></li>
                     </ul>
                 </div>
             </div>
@@ -78,30 +80,26 @@
 
             <mc:bs-message/>
 
-            <div id="messages" class="alert alert-success" role="alert" style="display: none"></div>
+            <c:forEach items="#{userController.incommingFriends}" var="account">
+                <div class="alert alert-info" role="alert">
+                    #{account.name} has sent you a friend request.
+                    <a href="#" class="alert-link accept-friend" data-target="#{account.id}">accept?</a>
+                </div>
+            </c:forEach>
 
             <div class="row">
                 <div class="col-md-6">
                     <h2>Now on the Net</h2>
 
-                    <c:if test="#{empty streamBean.recomendation}">
-                        <blockquote>
-                            <p>I love to talk about nothing. It's the only thing I know anything about.</p>
-                            <footer>Oscar Wilde</footer>
-                        </blockquote>
-                    </c:if>
+                    <div id="messages" class="alert alert-success" role="alert" style="display: none"></div>
 
-                    <c:forEach items="#{streamBean.recomendation}" var="post">
-                        <c:set value="#{post.dateTime}" var="formattedDate">
-                            <f:convertDateTime pattern="dd/MM/yyyy" />
-                        </c:set>
+                    <ui:repeat  value="#{streamModel.recommendation}" var="post">
+                        <mc:post type="FULL" postId="#{post.id}" date="#{post.dateTime}" body="#{post.content}"
+                                 nickname="#{post.writer.id}" likes="#{post.likesCount}"/>
+                    </ui:repeat>
 
-                        <mc:post type="FULL" postId="#{post.id}" date="#{formattedDate}" body="#{post.content}"
-                                 nickname="#{post.writer.id}" likes="#{post.likeCount}"/>
-                    </c:forEach>
-                    
-                    <mc:pager page="#{streamBean.page}" firstPage="#{streamBean.page==0}"
-                              lastPage="#{streamBean.lastPage}"/>
+                    <mc:pager firstPage="#{streamModel.firstPage}" lastPage="#{streamModel.lastPage}"
+                    nextPage="#{streamModel.nextPage}" previousPage="#{streamModel.previousPage}"/>
 
                 </div>
                 <div class="col-md-6">

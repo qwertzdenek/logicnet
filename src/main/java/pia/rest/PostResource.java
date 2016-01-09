@@ -7,7 +7,7 @@ import pia.data.Account;
 import pia.data.Post;
 
 import javax.annotation.security.RolesAllowed;
-import javax.ejb.Stateless;
+import javax.ejb.*;
 import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.stream.JsonGenerator;
@@ -29,6 +29,7 @@ import java.util.Set;
 @Path("post")
 @Produces(MediaType.APPLICATION_JSON)
 @Stateless
+@ConcurrencyManagement(value = ConcurrencyManagementType.CONTAINER)
 public class PostResource {
     private JsonGeneratorFactory jsonFactory;
 
@@ -57,33 +58,44 @@ public class PostResource {
         post.setDateTime(Timestamp.from(Instant.now()));
         post.setWriter(writer);
         post.setLikes(new LinkedHashSet<>());
-
-        writer.addPost(post);
+        post.setLikesCount(0);
 
         pd.save(post);
-        ad.save(writer);
 
         return Response.accepted().build();
     }
 
-    @POST
+    @PUT
     @RolesAllowed("user")
-    @Path("like/{post_id}")
+    @Path("like/{post}")
+    @Lock(LockType.WRITE)
     public Response likePost(
             @Context HttpServletRequest req,
-            @PathParam("post_id") long postId) {
+            @PathParam("post") long postId) {
         Account writer = ad.findOne(req.getUserPrincipal().getName());
 
         Post post = pd.findOne(postId);
         if (post == null) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity("{'message': 'post don\'t exist'}").build();
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        post.addLike(writer);
-        pd.save(post);
+        if (post.getLikes().contains(writer)) {
+            return Response.status(Response.Status.NOT_MODIFIED).build();
+        }
 
-        return Response.accepted().build();
+        int count = pd.addLike(post, writer);
+
+        StringWriter sw = new StringWriter();
+        JsonGenerator gen = jsonFactory.createGenerator(sw);
+
+        gen.writeStartObject();
+        gen.write("post", post.getId());
+        gen.write("likes", count);
+        gen.writeEnd();
+
+        gen.close();
+
+        return Response.accepted(sw.toString()).build();
     }
 
     @GET
@@ -117,5 +129,28 @@ public class PostResource {
         gen.close();
 
         return Response.ok(sw.toString()).build();
+    }
+
+    @PUT
+    @RolesAllowed("user")
+    @Path("hide/{post}")
+    public Response hidePost(
+            @Context HttpServletRequest req,
+            @PathParam("post") long postId) {
+        Account who = ad.findOne(req.getUserPrincipal().getName());
+
+        Post post = pd.findOne(postId);
+        if (post == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        if (who.getPostHides().contains(post)) {
+            return Response.status(Response.Status.NOT_MODIFIED).build();
+        }
+
+        who.getPostHides().add(post);
+        ad.save(who);
+
+        return Response.ok().build();
     }
 }

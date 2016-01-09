@@ -55,4 +55,8 @@ public class ImageService {
     public Path getPath(String name) {
         return Paths.get(uploadDir, subdir, name);
     }
+
+    public boolean exists(String filename) {
+        return getPath(filename).toFile().exists();
+    }
 }
