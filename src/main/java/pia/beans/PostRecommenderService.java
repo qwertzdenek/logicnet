@@ -1,5 +1,6 @@
 package pia.beans;
 
+import pia.dao.AccountDao;
 import pia.dao.JPADAO;
 import pia.dao.PostDao;
 import pia.data.Account;
@@ -9,22 +10,22 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.security.Principal;
 import java.util.List;
 
 @Named
 @Stateless
 public class PostRecommenderService implements Serializable {
     @Inject
-    Principal principal;
+    @JPADAO
+    AccountDao ad;
 
     @Inject
     @JPADAO
     PostDao pd;
 
-    public List<Post> getRecommended(Account a) {
-        List<Post> recommended = pd.getLastPosts();
-        recommended.removeAll(a.getPostHides());
+    public List<Post> getRecommended(String a) {
+        List<Post> recommended = pd.getLatestPosts();
+        recommended.removeAll(ad.findOne(a).getPostHides());
 
         return recommended;
     }

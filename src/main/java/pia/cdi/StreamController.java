@@ -3,11 +3,11 @@ package pia.cdi;
 import pia.beans.PostRecommenderService;
 import pia.data.Post;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.security.Principal;
 import java.util.List;
 
 @Named
@@ -19,14 +19,13 @@ public class StreamController {
     private PostRecommenderService recommender;
 
     @Inject
-    UserController userController;
+    Principal principal;
 
     @Inject
-    StreamModel model;
+    private StreamModel model;
 
     public void update() {
-        System.out.println("StreamController update");
-        List<Post> newRec = recommender.getRecommended(userController.getAccount());
+        List<Post> newRec = recommender.getRecommended(principal.getName());
 
         int pageCount = (int) Math.ceil((float) newRec.size() / PAGING);
         pageCount = Math.max(pageCount, 1);
@@ -49,7 +48,5 @@ public class StreamController {
 
         boolean lastPage = (page + 1) * PAGING >= newRec.size();
         model.setLastPage(lastPage);
-
-        System.out.println(page+"/"+pageCount+" "+lastPage+" #"+newRec.size());
     }
 }

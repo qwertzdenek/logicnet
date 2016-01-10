@@ -3,6 +3,7 @@ package pia.data;
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -13,16 +14,14 @@ public class Account extends BaseEntity<String> {
     private Date birthday;
     private String profilePicture;
 
-    private Set<String> roles = new LinkedHashSet<>();
-    private Set<Post> posts = new LinkedHashSet<>();
-    private Set<Post> likedPosts = new LinkedHashSet<>();
-    private Set<Post> postHides = new LinkedHashSet<>();
+    private Set<String> roles;
 
-    private Set<Account> friends = new LinkedHashSet<>();
-    private Set<Account> befriended = new LinkedHashSet<>();
+    private Set<Post> posts;
+    private Set<Post> likedPosts;
+    private Set<Post> postHides;
 
-    private Set<Account> friendRequests = new LinkedHashSet<>();
-    private Set<Account> incomingFriendRequests = new LinkedHashSet<>();
+    private Set<Account> friendRequests;
+    private Set<Account> incomingFriendRequests;
 
     @Id
     @Column(name = "account_id")
@@ -63,7 +62,7 @@ public class Account extends BaseEntity<String> {
         this.birthday = birthday;
     }
 
-    @Column(nullable = false)
+    @Column(name = "profile_picture", nullable = false)
     public String getProfilePicture() {
         return profilePicture;
     }
@@ -83,6 +82,7 @@ public class Account extends BaseEntity<String> {
         this.roles = roles;
     }
 
+    // Posts
     @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     public Set<Post> getPosts() {
         return posts;
@@ -105,7 +105,7 @@ public class Account extends BaseEntity<String> {
         this.likedPosts = likedPosts;
     }
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "post_hides",
             joinColumns = @JoinColumn(name = "account_id", referencedColumnName = "account_id"),
@@ -116,41 +116,6 @@ public class Account extends BaseEntity<String> {
 
     public void setPostHides(Set<Post> postHides) {
         this.postHides = postHides;
-    }
-
-    // Friend part
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "friends_list",
-            joinColumns = @JoinColumn(name = "account", referencedColumnName = "account_id"),
-            inverseJoinColumns = @JoinColumn(name = "friend", referencedColumnName = "account_id"))
-    public Set<Account> getFriends() {
-        return friends;
-    }
-
-    public void setFriends(Set<Account> friends) {
-        this.friends = friends;
-    }
-
-    @ManyToMany(mappedBy = "friends")
-    public Set<Account> getBefriended() {
-        return this.befriended;
-    }
-
-    public void setBefriended(Set<Account> befriended) {
-        this.befriended = befriended;
-    }
-
-    /**
-     * Aggregates both friend directions.
-     * @return set of friends
-     */
-    public Set<Account> reflexiveFriends() {
-        Set<Account> all = new LinkedHashSet<>();
-        all.addAll(this.friends);
-        all.addAll(this.befriended);
-
-        return all;
     }
 
     // friend requests
@@ -167,7 +132,7 @@ public class Account extends BaseEntity<String> {
         this.friendRequests = friendRequests;
     }
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "friendRequests")
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "friendRequests")
     public Set<Account> getIncomingFriendRequests() {
         return incomingFriendRequests;
     }

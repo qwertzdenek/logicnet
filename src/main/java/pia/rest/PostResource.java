@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonGeneratorFactory;
+import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Pattern;
 import javax.ws.rs.*;
@@ -19,12 +20,11 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.StringWriter;
-import java.security.Principal;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.List;
 
 @Path("post")
 @Produces(MediaType.APPLICATION_JSON)
@@ -65,6 +65,20 @@ public class PostResource {
         return Response.accepted().build();
     }
 
+    private String serializePost(Post post) {
+        StringWriter sw = new StringWriter();
+        JsonGenerator gen = jsonFactory.createGenerator(sw);
+
+        gen.writeStartObject();
+        gen.write("post", post.getId());
+        gen.write("likes", post.getLikesCount());
+        gen.writeEnd();
+
+        gen.close();
+
+        return sw.toString();
+    }
+
     @PUT
     @RolesAllowed("user")
     @Path("like/{post}")
@@ -75,27 +89,18 @@ public class PostResource {
         Account writer = ad.findOne(req.getUserPrincipal().getName());
 
         Post post = pd.findOne(postId);
+
         if (post == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
         if (post.getLikes().contains(writer)) {
-            return Response.status(Response.Status.NOT_MODIFIED).build();
+            return Response.status(Response.Status.NOT_MODIFIED).entity(serializePost(post)).build();
         }
 
-        int count = pd.addLike(post, writer);
+        pd.addLike(post, writer);
 
-        StringWriter sw = new StringWriter();
-        JsonGenerator gen = jsonFactory.createGenerator(sw);
-
-        gen.writeStartObject();
-        gen.write("post", post.getId());
-        gen.write("likes", count);
-        gen.writeEnd();
-
-        gen.close();
-
-        return Response.accepted(sw.toString()).build();
+        return Response.accepted(serializePost(post)).build();
     }
 
     @GET
@@ -110,7 +115,7 @@ public class PostResource {
             return Response.noContent().entity("{'message': 'account don\'t exist'}").build();
         }
 
-        Set<Post> posts = account.getPosts();
+        List<Post> posts = pd.getLatestPosts(account);
 
         StringWriter sw = new StringWriter();
         JsonGenerator gen = jsonFactory.createGenerator(sw);

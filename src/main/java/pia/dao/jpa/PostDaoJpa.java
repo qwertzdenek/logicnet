@@ -7,6 +7,7 @@ import pia.data.Account;
 import pia.data.Post;
 
 import javax.inject.Inject;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.sql.Date;
@@ -14,6 +15,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @JPADAO
@@ -38,22 +40,28 @@ public class PostDaoJpa extends GenericDaoJpa<Post, Long> implements PostDao {
     }
 
     @Override
-    public List<Post> getLastPosts() {
+    public List<Post> getLatestPosts() {
         TypedQuery<Post> q = em.createQuery("SELECT p FROM Post p ORDER BY p.dateTime DESC", Post.class);
-
         return q.getResultList();
     }
 
     @Override
-    public List<Post> getLatestFrom(Account account) {
+    public List<Post>  getLatestPosts(Account account) {
+        TypedQuery<Post> q = em.createQuery("SELECT p FROM Post p WHERE p.writer = :account ORDER BY p.dateTime DESC", Post.class);
+        q.setParameter("account", account);
+        return q.getResultList();
+    }
+
+    @Override
+    public List<Post> getLatestPosts(Account account, int count) {
         TypedQuery<Post> q = em.createQuery("SELECT p FROM Post p WHERE p.writer = :writer ORDER BY p.dateTime DESC", Post.class);
         q.setParameter("writer", account);
-        q.setMaxResults(8);
+        q.setMaxResults(count);
         return q.getResultList();
     }
 
     @Override
-    public int addLike(Post post, Account who) {
+    public void addLike(Post post, Account who) {
         who.getLikedPosts().add(post);
 
         int count = post.getLikesCount()+1;
@@ -61,7 +69,5 @@ public class PostDaoJpa extends GenericDaoJpa<Post, Long> implements PostDao {
 
         save(post);
         ad.save(who);
-
-        return count;
     }
 }

@@ -17,7 +17,7 @@
     <ui:define name="title">LogicNet public stream</ui:define>
 
     <ui:define name="header">
-        <c:set scope="session" value="#{userController.username}" var="lastUser" />
+        <c:set scope="session" value="#{userBean.username}" var="lastUser" />
         <c:set scope="session" value="true" var="knownUser" />
 
         <div id="logout-modal" class="modal fade" tabindex="-1" role="dialog">
@@ -25,7 +25,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">x</button>
-                        <h4 class="modal-title">Dear #{userController.username}, do you really want to logout?</h4>
+                        <h4 class="modal-title">Dear #{userBean.username}, do you really want to logout?</h4>
                     </div>
                     <div class="modal-body">
                         <p>Your session will be lost.</p>
@@ -58,7 +58,7 @@
                         <li class="bg-success">
                             <a href="#" data-toggle="modal" data-target="#logout-modal">logout</a>
                         </li>
-                        <li class="bg-success"><h:link value="#{userController.username}" outcome="private"/></li>
+                        <li class="bg-success"><h:link value="#{userBean.username}" outcome="private"/></li>
                     </ul>
                 </div>
             </div>
@@ -80,7 +80,7 @@
 
             <mc:bs-message/>
 
-            <c:forEach items="#{userController.incommingFriends}" var="account">
+            <c:forEach items="#{userBean.incomingFriends}" var="account">
                 <div class="alert alert-info" role="alert">
                     #{account.name} has sent you a friend request.
                     <a href="#" class="alert-link accept-friend" data-target="#{account.id}">accept?</a>

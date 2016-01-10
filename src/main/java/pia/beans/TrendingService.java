@@ -21,7 +21,7 @@ import java.util.Set;
 public class TrendingService {
     @Inject
     @JPADAO
-    PostDao pd;
+    private PostDao pd;
 
     private LinkedHashSet<Post> trending = new LinkedHashSet<>();
 

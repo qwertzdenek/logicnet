@@ -5,19 +5,13 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:mc="http://xmlns.jcp.org/jsf/composite/components"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-      xmlns:h="http://java.sun.com/jsf/html">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
 <ui:composition template="/WEB-INF/templates/view-full.xhtml">
-    <ui:define name="metadata">
-        <f:metadata>
-            <f:viewParam name="page" value="#{streamModel.page}" required="false"/>
-            <f:event type="preRenderView" listener="#{streamController.update}"/>
-        </f:metadata>
-    </ui:define>
-
     <ui:define name="title">LogicNet private space</ui:define>
 
     <ui:define name="header">
-        <c:set scope="session" value="#{userController.username}" var="lastUser"/>
+        <c:set scope="session" value="#{userBean.username}" var="lastUser"/>
         <c:set scope="session" value="true" var="knownUser"/>
 
         <div id="logout-modal" class="modal fade" tabindex="-1" role="dialog">
@@ -25,7 +19,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">x</button>
-                        <h4 class="modal-title">Dear #{userController.username}, do you really want to logout?</h4>
+                        <h4 class="modal-title">Dear #{userBean.username}, do you really want to logout?</h4>
                     </div>
                     <div class="modal-body">
                         <p>Your session will be lost.</p>
@@ -83,132 +77,69 @@
 
         <mc:bs-message/>
 
-        <c:forEach items="#{userController.incommingFriends}" var="account">
+        <c:forEach items="#{userBean.incomingFriends}" var="account">
             <div class="alert alert-info" role="alert">
                 #{account.name} has sent you a friend request.
                 <a href="#" class="alert-link accept-friend" data-target="#{account.id}">accept?</a>
             </div>
         </c:forEach>
 
-
         <div class="row">
             <div class="col-md-2">
                 <ul class="nav nav-pills nav-stacked">
-                    <li class="active"><a href="#me" data-toggle="tab">Mark Zuckerberg</a></li>
-                    <li><a href="#8784" data-toggle="tab">Kathy</a></li>
-                    <li><a href="#9595" data-toggle="tab">Bill</a></li>
-                    <li><a href="#8487" data-toggle="tab">Meggy</a></li>
-                    <li><a href="#2154" data-toggle="tab">Bob</a></li>
+                    <ui:repeat value="#{userBean.friends}" var="friend">
+                        <li>
+                            <h:link value="#{friend.name}" fragment="#{friend.id}" p:data-toggle="tab" />
+                        </li>
+                    </ui:repeat>
                 </ul>
             </div>
             <div class="col-md-6">
                 <div class="tab-content">
-                    <div id="me" class="tab-pane fade in active">
-
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                Lorem ipsum dolor sit amet.
-                            </div>
-                            <div class="panel-footer">
-                                <button class="btn btn-success" type="button">
-                                    <span class="glyphicon glyphicon-heart"/>
-                                </button>
-                                Published on 12/09/2015, near Pilsen
-                            </div>
+                    <ui:repeat value="#{userBean.friends}" var="friend">
+                        <div id="#{friend.id}" class="tab-pane fade in">
+                            <ui:repeat value="#{userBean.getLatestPosts(friend)}" var="post">
+                                <mc:post type="BASIC" postId="#{post.id}" date="#{post.dateTime}" body="#{post.content}"
+                                         nickname="#{post.writer.id}" likes="#{post.likesCount}" />
+                            </ui:repeat>
                         </div>
-
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                Lorem ipsum dolor sit amet.
-                            </div>
-                            <div class="panel-footer">
-                                <button class="btn btn-success" type="button">
-                                    <span class="glyphicon glyphicon-heart"/>
-                                </button>
-                                Published on 12/09/2015, near Pilsen
-                            </div>
-                        </div>
-
-                    </div>
-                    <div id="8784" class="tab-pane fade">
-
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                Příliš žluťoučký kůň úpěl ďábelské ódy.
-                            </div>
-                            <div class="panel-footer">
-                                <button class="btn btn-success" type="button">
-                                    <span class="glyphicon glyphicon-heart"></span>
-                                </button>
-                                Published on 12/09/2015, near Pilsen
-                            </div>
-                        </div>
-
-                    </div>
-                    <div id="9595" class="tab-pane fade">
-
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                Another panel. It's boring having just static page!
-                            </div>
-                            <div class="panel-footer">
-                                <button class="btn btn-success" type="button">
-                                    <span class="glyphicon glyphicon-heart"></span>
-                                </button>
-                                Published on 12/09/2015, near Pilsen
-                            </div>
-                        </div>
-
-                    </div>
-                    <div id="8487" class="tab-pane fade">
-                        <p>This user haven't shared anything.</p>
-                    </div>
-                    <div id="2154" class="tab-pane fade">
-
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc euismod turpis quis rutrum faucibus. Proin rutrum nisi ut vehicula mattis. Donec luctus odio in lectus faucibus, nec aliquam nunc fermentum. Vivamus sollicitudin porta dignissim. Nam et mollis augue, in convallis velit. Praesent id tempor nulla. Donec consequat luctus lectus in tempor. Mauris eget dui interdum, feugiat mi vel, dignissim eros. Sed congue erat eu leo tempor, a lobortis nisi maximus.
-                            </div>
-                            <div class="panel-footer">
-                                <button class="btn btn-success" type="button">
-                                    <span class="glyphicon glyphicon-heart"></span>
-                                </button>
-                                Published on 12/09/2015, near Pilsen
-                            </div>
-                        </div>
-
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc euismod turpis quis rutrum faucibus. Proin rutrum nisi ut vehicula mattis. Donec luctus odio in lectus faucibus, nec aliquam nunc fermentum. Vivamus sollicitudin porta dignissim. Nam et mollis augue, in convallis velit. Praesent id tempor nulla. Donec consequat luctus lectus in tempor. Mauris eget dui interdum, feugiat mi vel, dignissim eros. Sed congue erat eu leo tempor, a lobortis nisi maximus.
-                            </div>
-                            <div class="panel-footer">
-                                <button class="btn btn-success" type="button">
-                                    <span class="glyphicon glyphicon-heart"></span>
-                                </button>
-                                Published on 12/09/2015, near Pilsen
-                            </div>
-                        </div>
-
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc euismod turpis quis rutrum faucibus. Proin rutrum nisi ut vehicula mattis. Donec luctus odio in lectus faucibus, nec aliquam nunc fermentum. Vivamus sollicitudin porta dignissim. Nam et mollis augue, in convallis velit. Praesent id tempor nulla. Donec consequat luctus lectus in tempor. Mauris eget dui interdum, feugiat mi vel, dignissim eros. Sed congue erat eu leo tempor, a lobortis nisi maximus.
-                            </div>
-                            <div class="panel-footer">
-                                <button class="btn btn-success" type="button">
-                                    <span class="glyphicon glyphicon-heart"></span>
-                                </button>
-                                Published on 12/09/2015, near Pilsen
-                            </div>
-                        </div>
-                    </div>
+                    </ui:repeat>
                 </div>
             </div>
             <div class="col-md-4">
-                <h2>Mark Zuckerberg</h2>
-                <img src="/images/de763016-2ffa-409b-916a-5fa40efb9a21.png" width="160" alt="profile picture" />
-                <p>
-                    Bio, bio. Some nice introduction about me.
-                </p>
+                <h2><h:outputLabel value="#{userBean.username}" /></h2>
+                <img src="/images/#{userBean.account.profilePicture}" width="220" alt="profile picture" />
+                <p><h:outputLabel value="@#{userBean.account.id}" /></p>
+                <table class="table">
+                    <tr>
+                        <td>birthday</td>
+                        <td>
+                            <h:outputText value="#{userBean.account.birthday}">
+                                <f:convertDateTime pattern="dd. MM. yyyy" />
+                            </h:outputText>
+                            (#{userBean.age})
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>friends</td>
+                        <td>
+                            <!-- FIXME reflexive friends -->
+                            <h:outputText value="#{userBean.friendCount}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>posts</td>
+                        <td>
+                            <h:outputText value="#{userBean.postCount}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>likes</td>
+                        <td>
+                            <h:outputText value="#{userBean.likesCount}" />
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>
 

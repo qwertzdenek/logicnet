@@ -1,7 +1,5 @@
 package pia.data;
 
-import org.hibernate.annotations.BatchSize;
-
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Set;
@@ -36,7 +34,7 @@ public class Post extends BaseEntity<Long> {
         this.content = content;
     }
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name="writer")
     public Account getWriter() {
         return writer;
@@ -46,7 +44,7 @@ public class Post extends BaseEntity<Long> {
         this.writer = writtenBy;
     }
 
-    @Column(nullable = false)
+    @Column(name="date_time", nullable = false)
     public Timestamp getDateTime() {
         return dateTime;
     }
@@ -64,7 +62,7 @@ public class Post extends BaseEntity<Long> {
         this.likes = likes;
     }
 
-    @Column(nullable = false)
+    @Column(name="likes_count", nullable = false)
     public int getLikesCount() {
         return likesCount;
     }

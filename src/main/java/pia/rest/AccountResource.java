@@ -5,6 +5,7 @@ import org.apache.cxf.jaxrs.ext.multipart.Multipart;
 import pia.ServiceResult;
 import pia.beans.RegisterService;
 import pia.dao.AccountDao;
+import pia.dao.FriendshipDao;
 import pia.dao.JPADAO;
 import pia.data.Account;
 import pia.rest.entities.AccountEntity;
@@ -46,6 +47,10 @@ public class AccountResource implements Serializable {
     @JPADAO
     private AccountDao ad;
 
+    @Inject
+    @JPADAO
+    private FriendshipDao fd;
+
     public AccountResource() {
         jsonFactory = Json.createGeneratorFactory(null);
     }
@@ -65,52 +70,6 @@ public class AccountResource implements Serializable {
 
     @GET
     @RolesAllowed("user")
-    @Path("list")
-    public Response getAccounts() {
-        StringWriter sw = new StringWriter();
-        JsonGenerator gen = jsonFactory.createGenerator(sw);
-
-        List<Account> accountList = ad.listAll();
-
-        if (accountList.isEmpty()) {
-            return Response.noContent().build();
-        }
-
-        gen.writeStartArray();
-        for (Account a : accountList) {
-            gen.writeStartObject();
-            gen.write("nickname", a.getId());
-            gen.write("real_name", a.getName());
-            gen.write("profile", "/images/"+a.getProfilePicture());
-
-            Date birhday = a.getBirthday();
-            gen.write("birthday", new SimpleDateFormat("dd/MM/yyyy").format(birhday));
-
-            LocalDate birthday = birhday.toLocalDate();
-            LocalDate today = LocalDate.now(ZoneId.of("Europe/Prague"));
-            long age = ChronoUnit.YEARS.between(birthday, today);
-            gen.write("age", age);
-
-            gen.write("likes", a.getLikedPosts().size());
-            gen.write("posts", a.getPosts().size());
-            gen.writeEnd();
-        }
-        gen.writeEnd();
-
-        gen.close();
-
-        String result = sw.toString();
-        try {
-            sw.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return Response.ok(result).build();
-    }
-
-    @GET
-    @RolesAllowed("user")
     public Response getAccount(@Context HttpServletRequest req) {
         Account a = ad.findOne(req.getUserPrincipal().getName());
 
@@ -122,16 +81,16 @@ public class AccountResource implements Serializable {
         gen.write("real_name", a.getName());
         gen.write("profile", "/images/"+a.getProfilePicture());
 
-        Date birhday = a.getBirthday();
-        gen.write("birthday", new SimpleDateFormat("dd/MM/yyyy").format(birhday));
+        Date birthday = a.getBirthday();
+        gen.write("birthday", new SimpleDateFormat("dd/MM/yyyy").format(birthday));
 
-        LocalDate birthday = birhday.toLocalDate();
+        LocalDate localBirthday = birthday.toLocalDate();
         LocalDate today = LocalDate.now(ZoneId.of("Europe/Prague"));
-        long age = ChronoUnit.YEARS.between(birthday, today);
+        long age = ChronoUnit.YEARS.between(localBirthday, today);
         gen.write("age", age);
 
-        gen.write("likes", a.getLikedPosts().size());
-        gen.write("posts", a.getPosts().size());
+        gen.write("likes", ad.likesCount(a));
+        gen.write("posts", ad.postCount(a));
         gen.writeStartArray("friend_requests");
         for (Account fr : a.getIncomingFriendRequests()) {
             gen.writeStartObject();
@@ -141,7 +100,7 @@ public class AccountResource implements Serializable {
         }
         gen.writeEnd();
         gen.writeStartArray("friends");
-        for (Account fr : a.reflexiveFriends()) {
+        for (Account fr : fd.allFriends(a)) {
             gen.writeStartObject();
             gen.write("nickname", fr.getId());
             gen.write("real_name", fr.getName());
@@ -191,7 +150,7 @@ public class AccountResource implements Serializable {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        if (account.reflexiveFriends().contains(target) || account.getFriendRequests().contains(target)) {
+        if (fd.allFriends(account).contains(target) || target.getIncomingFriendRequests().contains(account)) {
             return Response.status(Response.Status.NOT_MODIFIED).build();
         }
 
@@ -200,7 +159,7 @@ public class AccountResource implements Serializable {
         }
 
         account.getFriendRequests().add(target);
-        ad.save(target);
+        ad.save(account);
 
         return Response.ok().build();
     }
@@ -223,16 +182,11 @@ public class AccountResource implements Serializable {
             return Response.status(Response.Status.NOT_ACCEPTABLE).build();
         }
 
-        // we are already friends
-        if (account.reflexiveFriends().contains(target)) {
+        if (fd.allFriends(account).contains(target)) {
             return Response.status(Response.Status.NOT_MODIFIED).build();
         }
 
-        target.getFriendRequests().remove(account);
-        account.getFriends().add(target);
-        target.getFriends().add(account);
-        ad.save(account);
-        ad.save(target);
+        fd.addFriendship(target, account);
 
         return Response.ok().build();
     }

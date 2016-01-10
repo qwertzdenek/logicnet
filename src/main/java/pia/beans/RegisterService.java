@@ -27,10 +27,10 @@ import java.util.Set;
 public class RegisterService implements Serializable {
     @Inject
     @JPADAO
-    AccountDao ad;
+    private AccountDao ad;
 
     @EJB
-    ImageService imageService;
+    private ImageService imageService;
 
     private ServiceResult doRegister(AccountEntity account, InputStream image, String imageName) throws IOException {
         Account newAccount = new Account();
@@ -54,10 +54,6 @@ public class RegisterService implements Serializable {
         roles.add("user");
 
         newAccount.setRoles(roles);
-        newAccount.setLikedPosts(new LinkedHashSet<>());
-        newAccount.setPostHides(new LinkedHashSet<>());
-        newAccount.setFriends(new LinkedHashSet<>());
-        newAccount.setFriendRequests(new LinkedHashSet<>());
 
         String plainPassword = account.getPassword();
         String digestedPassword;
