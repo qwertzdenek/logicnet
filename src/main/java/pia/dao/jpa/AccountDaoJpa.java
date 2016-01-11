@@ -37,4 +37,16 @@ public class AccountDaoJpa extends GenericDaoJpa<Account, String> implements Acc
         q.setParameter("account",account);
         return q.getResultList();
     }
+
+    @Override
+    public List<Account> listAll() {
+        TypedQuery<Account> q = em.createQuery("SELECT a FROM Account a", Account.class);
+        return q.getResultList();
+    }
+
+    @Override
+    public long accountCount() {
+        Query q = em.createQuery("SELECT count(a.id) FROM Account a");
+        return (long) q.getSingleResult();
+    }
 }

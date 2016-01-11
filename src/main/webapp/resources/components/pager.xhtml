@@ -10,6 +10,7 @@
     <cc:attribute name="nextPage" required="true" />
     <cc:attribute name="firstPage" required="true" />
     <cc:attribute name="lastPage" required="true" />
+    <cc:attribute name="tag" required="false" />
 </cc:interface>
 
 <cc:implementation>
@@ -17,12 +18,14 @@
         <ul class="pager">
             <li>
                 <h:link value="Previous" rendered="#{not cc.attrs.firstPage}">
+                    <f:param name="tag" value="#{cc.attrs.tag}" />
                     <f:param name="page" value="#{cc.attrs.previousPage}" />
                 </h:link>
             </li>
 
             <li>
                 <h:link value="Next" rendered="#{not cc.attrs.lastPage}">
+                    <f:param name="tag" value="#{cc.attrs.tag}" />
                     <f:param name="page" value="#{cc.attrs.nextPage}" />
                 </h:link>
             </li>

@@ -10,15 +10,12 @@ import pia.data.Post;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.NoResultException;
-import javax.transaction.*;
 import java.security.Principal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Set;
 
 @Named
 @RequestScoped
@@ -36,9 +33,6 @@ public class UserBean {
     @Inject
     @JPADAO
     private FriendshipDao fd;
-
-    @Inject
-    UserTransaction t;
 
     @Inject
     private Principal principal;

@@ -11,6 +11,7 @@ public interface PostDao extends GenericDao<Post, Long> {
     List<Post> getLatestPosts();
     List<Post> getLatestPosts(Account account);
     List<Post> getLatestPosts(Account account, int count);
+    List<Post> getLatestPostsWith(String tag);
 
     void addLike(Post post, Account who);
 }

@@ -14,6 +14,32 @@
         <c:set scope="session" value="#{userBean.username}" var="lastUser"/>
         <c:set scope="session" value="true" var="knownUser"/>
 
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                            aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"/>
+                        <span class="icon-bar"/>
+                        <span class="icon-bar"/>
+                    </button>
+                    <h:link styleClass="navbar-brand" outcome="public">
+                        <span class="glyphicon glyphicon-book" aria-hidden="true"/>
+                        LogicNet
+                    </h:link>
+                </div>
+                <div id="navbar" class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="bg-success">
+                            <a href="#" data-toggle="modal" data-target="#logout-modal">Logout</a>
+                        </li>
+                        <li class="bg-success"><h:link value="Stream" outcome="public"/></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
         <div id="logout-modal" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -27,38 +53,12 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         <a href="/logout">
-                            <button type="button" class="btn btn-primary">logout</button>
+                            <button type="button" class="btn btn-primary">Logout</button>
                         </a>
                     </div>
                 </div>
             </div>
         </div>
-
-        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
-                            aria-expanded="false" aria-controls="navbar">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"/>
-                        <span class="icon-bar"/>
-                        <span class="icon-bar"/>
-                    </button>
-                    <a class="navbar-brand" href="#">
-                        <span class="glyphicon glyphicon-book" aria-hidden="true"/>
-                        LogicNet
-                    </a>
-                </div>
-                <div id="navbar" class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="bg-success">
-                            <a href="#" data-toggle="modal" data-target="#logout-modal">logout</a>
-                        </li>
-                        <li class="bg-success"><h:link value="stream" outcome="public"/></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
     </ui:define>
 
     <ui:define name="content">

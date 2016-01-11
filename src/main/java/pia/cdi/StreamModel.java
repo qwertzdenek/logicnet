@@ -4,6 +4,7 @@ import pia.data.Post;
 
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
 @SessionScoped
 public class StreamModel implements Serializable {
     private int page = 0;
+    private String tag;
     private int pageCount;
     private boolean firstPage;
     private boolean lastPage;
@@ -22,6 +24,15 @@ public class StreamModel implements Serializable {
 
     public void setPage(int page) {
         this.page = page;
+    }
+
+    @Pattern(regexp = "\\p{L}+")
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     public int getPageCount() {

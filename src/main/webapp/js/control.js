@@ -46,13 +46,13 @@ $(document).ready(function () {
     });
 
     $("a.accept-friend").click(function (e) {
+        $(e.target.parentElement).hide('slow', function () {
+            $(e.target.parentElement).remove();
+        });
         var account = this.dataset.target;
         $.ajax({
             url: "http://" + window.location.host + "/api/account/friend/" + account, type: "PUT",
             success: function () {
-                e.target.parent.hide('slow', function () {
-                    e.target.parent.remove();
-                });
                 messagesBox.text("Friendship accepted");
                 messagesBox.show("slow");
             },
@@ -61,5 +61,19 @@ $(document).ready(function () {
                 messagesBox.show();
             }
         });
+    });
+
+    // jQCloud load
+    $.ajax({
+        url: "http://" + window.location.host + "/api/account/words", type: "GET",
+        success: function (json) {
+            var i;
+            var word_array = [];
+            for (i = 0; i < json.length; ++i) {
+                word_array.push({text: json[i].word, weight: json[i].count, link: "?tag="+json[i].word})
+            }
+
+            $("#word-cloud").jQCloud(word_array);
+        }
     });
 });

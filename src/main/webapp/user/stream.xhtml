@@ -10,6 +10,7 @@
     <ui:define name="metadata">
         <f:metadata>
             <f:viewParam name="page" value="#{streamModel.page}" required="false" />
+            <f:viewParam name="tag" value="#{streamModel.tag}" required="false" />
             <f:event type="preRenderView" listener="#{streamController.update}" />
         </f:metadata>
     </ui:define>
@@ -19,24 +20,6 @@
     <ui:define name="header">
         <c:set scope="session" value="#{userBean.username}" var="lastUser" />
         <c:set scope="session" value="true" var="knownUser" />
-
-        <div id="logout-modal" class="modal fade" tabindex="-1" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">x</button>
-                        <h4 class="modal-title">Dear #{userBean.username}, do you really want to logout?</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p>Your session will be lost.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <a href="/logout"><button type="button" class="btn btn-primary">logout</button></a>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
             <div class="container-fluid">
@@ -56,13 +39,31 @@
                 <div id="navbar" class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li class="bg-success">
-                            <a href="#" data-toggle="modal" data-target="#logout-modal">logout</a>
+                            <a href="#" data-toggle="modal" data-target="#logout-modal">Logout</a>
                         </li>
                         <li class="bg-success"><h:link value="#{userBean.username}" outcome="private"/></li>
                     </ul>
                 </div>
             </div>
         </nav>
+
+        <div id="logout-modal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">x</button>
+                        <h4 class="modal-title">Dear #{userBean.username}, do you really want to logout?</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Your session will be lost.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <a href="/logout"><button type="button" class="btn btn-primary">Logout</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </ui:define>
 
     <ui:define name="content">
@@ -99,11 +100,17 @@
                     </ui:repeat>
 
                     <mc:pager firstPage="#{streamModel.firstPage}" lastPage="#{streamModel.lastPage}"
-                    nextPage="#{streamModel.nextPage}" previousPage="#{streamModel.previousPage}"/>
+                              nextPage="#{streamModel.nextPage}" previousPage="#{streamModel.previousPage}"
+                              tag="#{streamModel.tag}"/>
 
                 </div>
                 <div class="col-md-6">
                     <h2>My topic cloud</h2>
+
+                    <h:form>
+                        <h:commandButton action="#{streamController.clearTag}" styleClass="btn btn-warning" value="show all" />
+                    </h:form>
+                    <div id="word-cloud" style="width: 400px; height: 300px;"></div>
                 </div>
             </div>
     </ui:define>

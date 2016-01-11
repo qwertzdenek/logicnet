@@ -1,5 +1,6 @@
 package pia.rest;
 
+import pia.beans.WordCloudService;
 import pia.dao.AccountDao;
 import pia.dao.JPADAO;
 import pia.dao.PostDao;
@@ -33,6 +34,9 @@ import java.util.List;
 public class PostResource {
     private JsonGeneratorFactory jsonFactory;
 
+    @EJB
+    WordCloudService wordCloudService;
+
     @Inject
     @JPADAO
     private PostDao pd;
@@ -61,6 +65,7 @@ public class PostResource {
         post.setLikesCount(0);
 
         pd.save(post);
+        wordCloudService.addPost(writer, post);
 
         return Response.accepted().build();
     }

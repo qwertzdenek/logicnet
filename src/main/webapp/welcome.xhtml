@@ -16,13 +16,15 @@
             <div class="container">
                 <h1>Logic Net</h1>
 
-                <p>Social network based on your interests without spam.</p>
+                <h2>Social network based on your interests without spam.</h2>
 
                 <p>
                     <a class="btn btn-primary btn-lg" href="#register" role="button" data-toggle="tab">Register Now</a>
                     <h:link role="button" class="btn btn-success btn-lg" outcome="connect" value="Connect" />
-                    <h:outputLabel value="Welcome back #{sessionScope['lastUser']}!" rendered="#{sessionScope['knownUser']}"/>
                 </p>
+                <h3>
+                    <h:outputText value="Welcome back #{sessionScope['lastUser']}!" rendered="#{sessionScope['knownUser']}"/>
+                </h3>
             </div>
         </div>
 

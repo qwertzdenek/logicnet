@@ -29,4 +29,11 @@ public class PostRecommenderService implements Serializable {
 
         return recommended;
     }
+
+    public List<Post> getRecommended(String a, String tag) {
+        List<Post> recommended = pd.getLatestPostsWith(tag);
+        recommended.removeAll(ad.findOne(a).getPostHides());
+
+        return recommended;
+    }
 }

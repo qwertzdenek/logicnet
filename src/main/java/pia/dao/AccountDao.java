@@ -12,4 +12,6 @@ public interface AccountDao extends GenericDao<Account, String> {
     int likesCount(Account account);
 
     List<Account> fetchIncomingFriends(Account account);
+    List<Account> listAll();
+    long accountCount();
 }

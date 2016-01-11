@@ -61,6 +61,13 @@ public class PostDaoJpa extends GenericDaoJpa<Post, Long> implements PostDao {
     }
 
     @Override
+    public List<Post> getLatestPostsWith(String tag) {
+        TypedQuery<Post> q = em.createQuery("SELECT p FROM Post p WHERE p.content LIKE CONCAT('%',:tag,'%') ORDER BY p.dateTime DESC", Post.class);
+        q.setParameter("tag", tag);
+        return q.getResultList();
+    }
+
+    @Override
     public void addLike(Post post, Account who) {
         who.getLikedPosts().add(post);
 

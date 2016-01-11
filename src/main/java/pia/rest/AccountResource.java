@@ -4,6 +4,8 @@ import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.jaxrs.ext.multipart.Multipart;
 import pia.ServiceResult;
 import pia.beans.RegisterService;
+import pia.beans.WordCloudService;
+import pia.cloud.Word;
 import pia.dao.AccountDao;
 import pia.dao.FriendshipDao;
 import pia.dao.JPADAO;
@@ -39,6 +41,9 @@ import java.util.List;
 @Stateless
 public class AccountResource implements Serializable {
     private JsonGeneratorFactory jsonFactory;
+
+    @EJB
+    WordCloudService wordCloudService;
 
     @EJB
     private RegisterService rs;
@@ -189,5 +194,34 @@ public class AccountResource implements Serializable {
         fd.addFriendship(target, account);
 
         return Response.ok().build();
+    }
+
+    @GET
+    @RolesAllowed("user")
+    @Path("words")
+    public Response getWords(@Context HttpServletRequest req) {
+        Account account = ad.findOne(req.getUserPrincipal().getName());
+
+        Word[] words = wordCloudService.mostFrequentWords(account);
+
+        if (words == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        StringWriter sw = new StringWriter();
+        JsonGenerator gen = jsonFactory.createGenerator(sw);
+
+        gen.writeStartArray();
+        for (Word w : words) {
+            gen.writeStartObject();
+            gen.write("word", w.getWord());
+            gen.write("count", w.getCount());
+            gen.writeEnd();
+        }
+        gen.writeEnd();
+
+        gen.close();
+
+        return Response.ok(sw.toString()).build();
     }
 }

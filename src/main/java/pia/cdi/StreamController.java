@@ -24,8 +24,17 @@ public class StreamController {
     @Inject
     private StreamModel model;
 
+    public void clearTag() {
+        model.setTag(null);
+    }
+
     public void update() {
-        List<Post> newRec = recommender.getRecommended(principal.getName());
+        List<Post> newRec;
+        if (model.getTag() == null) {
+            newRec = recommender.getRecommended(principal.getName());
+        } else {
+            newRec = recommender.getRecommended(principal.getName(), model.getTag());
+        }
 
         int pageCount = (int) Math.ceil((float) newRec.size() / PAGING);
         pageCount = Math.max(pageCount, 1);
