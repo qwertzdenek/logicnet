@@ -2,11 +2,11 @@ package pia.beans;
 
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.openejb.util.Base64;
+import pia.ServiceResult;
 import pia.dao.AccountDao;
 import pia.dao.JPADAO;
 import pia.data.Account;
 import pia.rest.entities.AccountEntity;
-import pia.ServiceResult;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -17,9 +17,9 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.sql.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 

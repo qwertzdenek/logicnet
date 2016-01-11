@@ -3,7 +3,6 @@ package pia.servlet;
 import pia.beans.ImageService;
 import pia.dao.AccountDao;
 import pia.dao.JPADAO;
-import pia.data.Account;
 
 import javax.ejb.EJB;
 import javax.inject.Inject;

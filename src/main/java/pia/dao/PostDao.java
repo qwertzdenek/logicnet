@@ -3,7 +3,6 @@ package pia.dao;
 import pia.data.Account;
 import pia.data.Post;
 
-import javax.persistence.NoResultException;
 import java.util.List;
 
 public interface PostDao extends GenericDao<Post, Long> {

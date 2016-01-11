@@ -3,13 +3,10 @@ package pia.dao.jpa;
 import pia.dao.AccountDao;
 import pia.dao.JPADAO;
 import pia.data.Account;
-import pia.data.Post;
 
-import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
-import java.util.Set;
 
 @JPADAO
 public class AccountDaoJpa extends GenericDaoJpa<Account, String> implements AccountDao {

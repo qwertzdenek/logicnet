@@ -2,7 +2,6 @@ package pia.dao;
 
 import pia.data.IEntity;
 
-import javax.persistence.EntityTransaction;
 import java.io.Serializable;
 
 /**

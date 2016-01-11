@@ -87,13 +87,18 @@
                             <span class="help-block"><h:message for="profile_picture" /></span>
                         </div>
 
-                        <h:outputLabel for="agree" value="Do you agree with my conditions?" />
-                        <h:selectBooleanCheckbox id="agree">
-                            <f:validator binding="#{conditionsValidator}" />
-                        </h:selectBooleanCheckbox>
-                        <span class="help-block"><h:message for="agree" /></span>
+                        <div class="form-group">
+                            <h:outputLabel for="agree" value="Do you agree with my conditions?" />
+                            <h:selectBooleanCheckbox id="agree" value="false">
+                                <f:validator binding="#{conditionsValidator}" />
+                            </h:selectBooleanCheckbox>
+                            <span class="help-block"><h:message for="agree" /></span>
+                        </div>
 
-                        <!-- TODO: captcha -->
+                        <div class="g-recaptcha" data-sitekey="6Lf6EBUTAAAAAOUzcJmo0A4ZHZNS9c8Vhsj-8wOs"></div>
+                        <h:inputHidden value="Hello World" id="recaptcha">
+                            <f:validator binding="#{captchaValidator}" value="nothing" />
+                        </h:inputHidden>
 
                         <h:commandButton actionListener="#{registerBean.register}" action="#{registerBean.action}" styleClass="btn btn-default" value="Submit" />
                     </h:form>

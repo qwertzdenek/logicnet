@@ -2,7 +2,6 @@ package pia.dao;
 
 import pia.data.Account;
 import pia.data.Friendship;
-import pia.data.Post;
 
 import java.util.List;
 

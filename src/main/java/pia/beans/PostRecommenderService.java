@@ -3,7 +3,6 @@ package pia.beans;
 import pia.dao.AccountDao;
 import pia.dao.JPADAO;
 import pia.dao.PostDao;
-import pia.data.Account;
 import pia.data.Post;
 
 import javax.ejb.Stateless;

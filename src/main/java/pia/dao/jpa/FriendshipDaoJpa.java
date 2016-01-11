@@ -9,11 +9,8 @@ import pia.data.Friendship;
 import javax.inject.Inject;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 @JPADAO

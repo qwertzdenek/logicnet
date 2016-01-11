@@ -7,15 +7,9 @@ import pia.data.Account;
 import pia.data.Post;
 
 import javax.inject.Inject;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import java.sql.Date;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 @JPADAO

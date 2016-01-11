@@ -29,12 +29,11 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringWriter;
+import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.sql.Date;
-import java.util.List;
 
 @Path("account")
 @Produces(MediaType.APPLICATION_JSON)
