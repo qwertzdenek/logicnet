@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<Server port="8005" shutdown="SHUTDOWN">
+<Server>
     <!-- TomEE plugin for Tomcat -->
     <Listener className="org.apache.tomee.catalina.ServerListener"/>
     <Listener className="org.apache.catalina.startup.VersionLoggerListener"/>

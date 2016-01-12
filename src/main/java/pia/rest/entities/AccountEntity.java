@@ -38,7 +38,6 @@ public class AccountEntity {
 
     @NotNull
     @Size(min = 4)
-    // TODO: pass complexity
     public String getPassword() {
         return password;
     }

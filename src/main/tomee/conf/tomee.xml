@@ -2,7 +2,7 @@
 <tomee>
 <Resource id="piaDatabase" type="javax.sql.DataSource">
     jdbcDriver = org.mariadb.jdbc.Driver
-    jdbcUrl = jdbc:mysql://localhost/pia
+    jdbcUrl = jdbc:mysql://localhost/janecekz
     userName = pia
     password = sp
     jtaManaged = true

@@ -74,6 +74,9 @@ $(document).ready(function () {
             }
 
             $("#word-cloud").jQCloud(word_array);
+        },
+        error: function (json) {
+            $("#word-cloud").append($("<strong>").text("You must write some words to get to get topic cloud.").html());
         }
     });
 });

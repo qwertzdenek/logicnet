@@ -81,12 +81,12 @@
 
             <mc:bs-message/>
 
-            <c:forEach items="#{userBean.incomingFriends}" var="account">
+            <ui:repeat value="#{userBean.incomingFriends}" var="account">
                 <div class="alert alert-info" role="alert">
                     #{account.name} has sent you a friend request.
                     <a href="#" class="alert-link accept-friend" data-target="#{account.id}">accept?</a>
                 </div>
-            </c:forEach>
+            </ui:repeat>
 
             <div class="row">
                 <div class="col-md-6">

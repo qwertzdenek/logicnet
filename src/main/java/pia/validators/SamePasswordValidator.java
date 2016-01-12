@@ -16,7 +16,7 @@ public class SamePasswordValidator implements Validator {
     public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
         UIInput passwordField = (UIInput) context.getViewRoot().findComponent("registerForm:password");
         if (passwordField == null)
-            throw new IllegalArgumentException("Unable to find component.");
+            throw new ValidatorException(new FacesMessage("Unable to find password component."));
         String password = (String) passwordField.getValue();
         String confirmPassword = (String) value;
         if (!confirmPassword.equals(password)) {

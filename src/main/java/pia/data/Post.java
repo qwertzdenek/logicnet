@@ -25,7 +25,7 @@ public class Post extends BaseEntity<Long> {
         super.setId(id);
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     public String getContent() {
         return content;
     }
